@@ -186,6 +186,14 @@
     .ocr-dropzone-title { font-weight: 730; }
     .ocr-dropzone-help { margin-top: 4px; color: var(--muted); font-size: 13px; }
     .ocr-preview { display: block; width: 100%; max-height: 290px; border-radius: 10px; object-fit: contain; background: #eef1f7; }
+    .ocr-preview-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+    .ocr-preview-card { position: relative; min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+    .ocr-preview-card img { display: block; width: 100%; height: 92px; object-fit: cover; background: #eef1f7; }
+    .ocr-preview-name { padding: 6px 8px; overflow: hidden; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    .ocr-results { display: grid; gap: 9px; max-height: 280px; margin-top: 13px; overflow: auto; }
+    .ocr-result-card { display: grid; grid-template-columns: 24px 1fr 1.35fr .7fr; gap: 8px; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-soft); }
+    .ocr-result-card .control { min-width: 0; padding: 8px 9px; font-size: 12px; }
+    .ocr-result-check { width: 17px; height: 17px; accent-color: var(--primary); }
     .ocr-progress { height: 8px; margin-top: 13px; overflow: hidden; border-radius: 999px; background: #e9edf5; }
     .ocr-progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7182f2, #5367e9); transition: width .2s ease; }
     .safety-summary { display: grid; gap: 10px; margin-bottom: 18px; }
@@ -274,6 +282,9 @@
       .job-list { grid-template-columns: 1fr; padding: 14px; }
       .job-pool-head { align-items: stretch; flex-direction: column; }
       .job-pool-actions { justify-content: flex-start; }
+      .ocr-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ocr-result-card { grid-template-columns: 22px 1fr; }
+      .ocr-result-card [data-field="position"], .ocr-result-card [data-field="city"] { grid-column: 2; }
       .form-grid { grid-template-columns: 1fr; }
       .field.full { grid-column: auto; }
       .form-body { padding: 18px 18px 6px; }
@@ -419,18 +430,19 @@
   </dialog>
 
   <dialog id="screenshotDialog">
-    <div class="modal-head"><h2>截图识别投递信息</h2><button class="close-btn" id="closeScreenshotDialog" type="button" aria-label="关闭">×</button></div>
+    <div class="modal-head"><h2>批量截图识别岗位</h2><button class="close-btn" id="closeScreenshotDialog" type="button" aria-label="关闭">×</button></div>
     <div class="form-body">
-      <p class="capture-note">选择或拖入投递成功页、申请记录页的截图。识别在你的浏览器本地完成，截图不会上传，也不会保存到投递记录中。</p>
-      <div class="ocr-dropzone" id="ocrDropzone" role="button" tabindex="0" aria-label="选择投递截图">
-        <div id="ocrEmptyState"><div class="ocr-dropzone-icon">▧</div><div class="ocr-dropzone-title">点击选择截图，或把图片拖到这里</div><div class="ocr-dropzone-help">支持 PNG、JPG、WEBP，建议截图文字清晰且保持正向</div></div>
-        <img class="ocr-preview" id="ocrPreview" alt="待识别截图预览" hidden>
+      <p class="capture-note">一次选择多张岗位详情或投递页面截图。识别完全在浏览器本地完成，图片不会上传；结果确认后只进入岗位库，不会自动变成投递记录。</p>
+      <div class="ocr-dropzone" id="ocrDropzone" role="button" tabindex="0" aria-label="选择多张岗位截图">
+        <div id="ocrEmptyState"><div class="ocr-dropzone-icon">▧</div><div class="ocr-dropzone-title">点击选择多张截图，或一起拖到这里</div><div class="ocr-dropzone-help">支持 PNG、JPG、WEBP；最多 20 张，建议每张截图展示一个岗位</div></div>
+        <div class="ocr-preview-grid" id="ocrPreviewGrid" hidden></div>
       </div>
-      <input id="ocrFileInput" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+      <input id="ocrFileInput" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
       <div class="ocr-progress" id="ocrProgress" hidden><div class="ocr-progress-fill" id="ocrProgressFill"></div></div>
-      <div class="capture-status" id="ocrStatus" role="status" aria-live="polite">请选择一张截图。</div>
+      <div class="capture-status" id="ocrStatus" role="status" aria-live="polite">请选择一张或多张截图。</div>
+      <div class="ocr-results" id="ocrResults" hidden></div>
     </div>
-    <div class="modal-actions"><button class="btn" id="cancelScreenshotDialog" type="button">取消</button><button class="btn btn-primary" id="startOcrBtn" type="button" disabled>开始识别</button></div>
+    <div class="modal-actions"><button class="btn" id="cancelScreenshotDialog" type="button">取消</button><button class="btn btn-primary" id="startOcrBtn" type="button" disabled>开始批量识别</button></div>
   </dialog>
 
   <dialog id="jobSyncDialog">
@@ -488,7 +500,7 @@
       const JOB_POOL_META_KEY = 'autumnRecruitmentTracker.jobPoolMeta.v1';
       const QQ_JOB_DOC_URL = 'https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&viewId=vKWCWH';
       const SCHEMA_VERSION = 1;
-      const APP_VERSION = '2.5.0';
+      const APP_VERSION = '2.6.0';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
@@ -511,8 +523,9 @@
       let backupFileHandle = null;
       let lastFileBackupAt = '';
       let persistenceQueue = Promise.resolve();
-      let ocrFile = null;
-      let ocrPreviewUrl = '';
+      let ocrFiles = [];
+      let ocrPreviewUrls = [];
+      let ocrCandidates = [];
       let ocrWorker = null;
       let ocrRunning = false;
 
@@ -1321,18 +1334,22 @@
       }
 
       function resetScreenshotDialog() {
-        if (ocrPreviewUrl) URL.revokeObjectURL(ocrPreviewUrl);
-        ocrPreviewUrl = '';
-        ocrFile = null;
+        ocrPreviewUrls.forEach(url => URL.revokeObjectURL(url));
+        ocrPreviewUrls = [];
+        ocrFiles = [];
+        ocrCandidates = [];
         $('#ocrFileInput').value = '';
-        $('#ocrPreview').hidden = true;
-        $('#ocrPreview').removeAttribute('src');
+        $('#ocrPreviewGrid').hidden = true;
+        $('#ocrPreviewGrid').innerHTML = '';
+        $('#ocrResults').hidden = true;
+        $('#ocrResults').innerHTML = '';
         $('#ocrEmptyState').hidden = false;
         $('#ocrDropzone').classList.remove('has-image', 'is-dragging');
         $('#ocrProgress').hidden = true;
         $('#ocrProgressFill').style.width = '0%';
         $('#ocrStatus').className = 'capture-status';
-        $('#ocrStatus').textContent = '请选择一张截图。';
+        $('#ocrStatus').textContent = '请选择一张或多张截图。';
+        $('#startOcrBtn').textContent = '开始批量识别';
         $('#startOcrBtn').disabled = true;
       }
 
@@ -1346,30 +1363,63 @@
         resetScreenshotDialog();
       }
 
-      function selectScreenshot(file) {
+      function selectScreenshots(fileList) {
         const status = $('#ocrStatus');
-        if (!file || !/^image\/(png|jpeg|webp)$/i.test(file.type)) {
+        const selected = [...(fileList || [])];
+        if (!selected.length) return;
+        const valid = selected.filter(file => /^image\/(png|jpeg|webp)$/i.test(file.type) && file.size <= 18 * 1024 * 1024).slice(0, 20);
+        if (!valid.length) {
           status.className = 'capture-status error';
-          status.textContent = '请选择 PNG、JPG 或 WEBP 图片。';
+          status.textContent = '请选择小于 18 MB 的 PNG、JPG 或 WEBP 图片。';
           return;
         }
-        if (file.size > 18 * 1024 * 1024) {
-          status.className = 'capture-status error';
-          status.textContent = '图片超过 18 MB，请先裁剪或压缩后重试。';
-          return;
-        }
-        if (ocrPreviewUrl) URL.revokeObjectURL(ocrPreviewUrl);
-        ocrFile = file;
-        ocrPreviewUrl = URL.createObjectURL(file);
-        $('#ocrPreview').src = ocrPreviewUrl;
-        $('#ocrPreview').hidden = false;
+        ocrPreviewUrls.forEach(url => URL.revokeObjectURL(url));
+        ocrFiles = valid;
+        ocrCandidates = [];
+        ocrPreviewUrls = valid.map(file => URL.createObjectURL(file));
+        $('#ocrPreviewGrid').innerHTML = valid.map((file, index) => `<div class="ocr-preview-card"><img src="${escapeHtml(ocrPreviewUrls[index])}" alt="第 ${index + 1} 张待识别截图"><div class="ocr-preview-name">${escapeHtml(file.name || `截图 ${index + 1}`)}</div></div>`).join('');
+        $('#ocrPreviewGrid').hidden = false;
+        $('#ocrResults').hidden = true;
+        $('#ocrResults').innerHTML = '';
         $('#ocrEmptyState').hidden = true;
         $('#ocrDropzone').classList.add('has-image');
         $('#ocrProgress').hidden = true;
         $('#ocrProgressFill').style.width = '0%';
         status.className = 'capture-status';
-        status.textContent = `已选择：${file.name || '投递截图'}，点击“开始识别”。`;
+        const skipped = selected.length - valid.length;
+        status.textContent = `已选择 ${valid.length} 张截图${skipped > 0 ? `，另有 ${skipped} 张因格式、大小或数量限制被忽略` : ''}。`;
+        $('#startOcrBtn').textContent = '开始批量识别';
         $('#startOcrBtn').disabled = false;
+      }
+
+      function renderOcrCandidates() {
+        $('#ocrResults').hidden = false;
+        $('#ocrResults').innerHTML = ocrCandidates.map((job, index) => `<div class="ocr-result-card" data-ocr-index="${index}">
+          <input class="ocr-result-check" type="checkbox" checked aria-label="选择第 ${index + 1} 条岗位">
+          <input class="control" data-field="company" value="${escapeHtml(job.company)}" placeholder="公司">
+          <input class="control" data-field="position" value="${escapeHtml(job.position)}" placeholder="岗位">
+          <input class="control" data-field="city" value="${escapeHtml(job.city)}" placeholder="城市">
+        </div>`).join('');
+      }
+
+      function importOcrCandidates() {
+        const selected = [...document.querySelectorAll('.ocr-result-card')].filter(card => card.querySelector('.ocr-result-check').checked).map(card => normalizeJob({
+          company: card.querySelector('[data-field="company"]').value,
+          position: card.querySelector('[data-field="position"]').value,
+          city: card.querySelector('[data-field="city"]').value,
+          category: '截图识别'
+        })).filter(job => job.company && job.position);
+        if (!selected.length) {
+          $('#ocrStatus').className = 'capture-status error';
+          $('#ocrStatus').textContent = '请至少保留一条公司和岗位都已填写的结果。';
+          return;
+        }
+        const before = jobs.length;
+        saveJobs(selected);
+        const added = jobs.length - before;
+        closeScreenshotDialog();
+        location.hash = '#jobPool';
+        showToast(`已加入岗位库 ${added} 条${selected.length > added ? `，自动合并重复 ${selected.length - added} 条` : ''}`);
       }
 
       function openTesseractCache() {
@@ -1477,7 +1527,8 @@
       }
 
       async function recognizeScreenshot() {
-        if (!ocrFile || ocrRunning) return;
+        if (ocrCandidates.length && !ocrRunning) return importOcrCandidates();
+        if (!ocrFiles.length || ocrRunning) return;
         const status = $('#ocrStatus');
         ocrRunning = true;
         $('#startOcrBtn').disabled = true;
@@ -1502,15 +1553,35 @@
             ocrWorker = null;
             return;
           }
-          const result = await ocrWorker.recognize(ocrFile);
-          const seed = parseScreenshotText(result?.data?.text || '');
+          const recognized = [];
+          for (let index = 0; index < ocrFiles.length; index += 1) {
+            if (!ocrRunning) break;
+            status.textContent = `正在识别第 ${index + 1}/${ocrFiles.length} 张：${ocrFiles[index].name || '岗位截图'}…`;
+            const result = await ocrWorker.recognize(ocrFiles[index]);
+            const seed = parseScreenshotText(result?.data?.text || '');
+            if (seed.company || seed.position) recognized.push(normalizeJob({
+              company: seed.company,
+              position: seed.position,
+              city: seed.city,
+              category: '截图识别'
+            }));
+            $('#ocrProgressFill').style.width = `${Math.round(((index + 1) / ocrFiles.length) * 100)}%`;
+          }
           await ocrWorker.terminate();
           ocrWorker = null;
           ocrRunning = false;
-          if ($('#screenshotDialog').open) $('#screenshotDialog').close();
-          resetScreenshotDialog();
-          openDialog(null, seed);
-          showToast(seed.company || seed.position ? '识别完成，请检查信息后保存' : '文字已识别，请手动补全关键信息');
+          ocrCandidates = recognized;
+          if (!recognized.length) {
+            $('#startOcrBtn').disabled = false;
+            status.className = 'capture-status error';
+            status.textContent = '没有识别到公司或岗位，请换用更清晰、文字更大的截图。';
+            return;
+          }
+          renderOcrCandidates();
+          status.className = 'capture-status success';
+          status.textContent = `识别出 ${recognized.length} 条，请检查公司、岗位和城市；取消勾选可跳过。`;
+          $('#startOcrBtn').textContent = `导入岗位库（${recognized.length}）`;
+          $('#startOcrBtn').disabled = false;
         } catch (error) {
           ocrRunning = false;
           if (ocrWorker) {
@@ -1656,14 +1727,14 @@
       $('#ocrDropzone').addEventListener('keydown', event => {
         if (!ocrRunning && ['Enter', ' '].includes(event.key)) { event.preventDefault(); $('#ocrFileInput').click(); }
       });
-      $('#ocrFileInput').addEventListener('change', event => selectScreenshot(event.target.files?.[0]));
+      $('#ocrFileInput').addEventListener('change', event => selectScreenshots(event.target.files));
       for (const type of ['dragenter', 'dragover']) {
         $('#ocrDropzone').addEventListener(type, event => { event.preventDefault(); if (!ocrRunning) $('#ocrDropzone').classList.add('is-dragging'); });
       }
       for (const type of ['dragleave', 'drop']) {
         $('#ocrDropzone').addEventListener(type, event => { event.preventDefault(); $('#ocrDropzone').classList.remove('is-dragging'); });
       }
-      $('#ocrDropzone').addEventListener('drop', event => { if (!ocrRunning) selectScreenshot(event.dataTransfer?.files?.[0]); });
+      $('#ocrDropzone').addEventListener('drop', event => { if (!ocrRunning) selectScreenshots(event.dataTransfer?.files); });
       $('#screenshotDialog').addEventListener('click', event => { if (event.target === $('#screenshotDialog')) closeScreenshotDialog(); });
       $('#screenshotDialog').addEventListener('cancel', event => { event.preventDefault(); closeScreenshotDialog(); });
       window.addEventListener('message', handleCaptureMessage);
