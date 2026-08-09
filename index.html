@@ -63,7 +63,7 @@
     .sidebar-footer { margin-top: auto; padding: 14px 12px; border-radius: 12px; background: var(--green-soft); color: #23765a; font-size: 12px; }
     .sidebar-footer strong { display: block; margin-bottom: 2px; font-size: 13px; }
     .shell { min-width: 0; width: 100%; max-width: 1540px; margin: 0 auto; padding: 30px 28px 48px; }
-    #overview, #records, #upcoming { scroll-margin-top: 72px; }
+    #overview, #jobPool, #records, #upcoming { scroll-margin-top: 72px; }
     .topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 28px; }
     .brand { display: flex; align-items: center; gap: 14px; }
     .brand-mark {
@@ -198,6 +198,33 @@
     .safety-actions .btn { width: 100%; }
     .safety-footnote { margin: 15px 0 0; color: var(--muted); font-size: 12px; }
 
+    .job-pool { margin-bottom: 20px; overflow: hidden; }
+    .job-pool-head { align-items: flex-start; }
+    .job-pool-actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
+    .job-source { display: inline-flex; align-items: center; gap: 5px; color: var(--primary); text-decoration: none; font-size: 12px; font-weight: 700; }
+    .job-source:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .job-pool-toolbar { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 12px; align-items: center; padding: 15px 22px; border-bottom: 1px solid var(--line); background: var(--surface-soft); }
+    .job-sync-meta { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .job-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 18px 22px 22px; }
+    .job-card { min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: #fff; transition: .18s ease; }
+    .job-card:hover { transform: translateY(-1px); border-color: #cfd6e7; box-shadow: 0 8px 20px rgba(33, 45, 75, .07); }
+    .job-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .job-company { min-width: 0; font-weight: 760; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .job-city { flex: 0 0 auto; padding: 2px 8px; border-radius: 999px; background: #edf8ff; color: #287ea9; font-size: 11px; font-weight: 700; }
+    .job-position { min-height: 42px; margin-top: 7px; color: #3c475b; font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
+    .job-extra { min-height: 19px; margin-top: 7px; color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+    .job-card-actions { display: flex; gap: 8px; margin-top: 13px; }
+    .job-card-actions .btn { flex: 1; }
+    .job-empty { grid-column: 1 / -1; padding: 36px 18px; color: var(--muted); text-align: center; }
+    .sync-steps { display: grid; gap: 10px; margin-bottom: 17px; }
+    .sync-step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; padding: 12px 13px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-soft); }
+    .sync-step-number { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; color: #fff; background: var(--primary); font-size: 12px; font-weight: 800; }
+    .sync-step strong { display: block; font-size: 13px; }
+    .sync-step span { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .sync-fallback { margin-top: 17px; padding-top: 17px; border-top: 1px solid var(--line); }
+    .sync-fallback summary { cursor: pointer; color: var(--primary-dark); font-size: 13px; font-weight: 700; }
+    .sync-fallback textarea { margin-top: 11px; min-height: 112px; }
+
     .toast { position: fixed; z-index: 20; left: 50%; bottom: 28px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: #202a40; color: #fff; border-radius: 11px; padding: 11px 17px; box-shadow: 0 10px 30px rgba(20, 29, 54, .2); transition: .22s ease; font-size: 14px; }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
@@ -206,6 +233,7 @@
       .dashboard { grid-template-columns: 1fr; }
       .side-panel { position: static; }
       .schedule-list { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 22px; }
+      .job-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 900px) {
       .app-layout { display: block; }
@@ -225,6 +253,8 @@
       .top-actions .btn .icon { margin: 0; font-size: 17px; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       .stage-grid { grid-template-columns: repeat(4, 1fr); row-gap: 16px; }
+      .job-pool-toolbar { grid-template-columns: 1fr; }
+      .job-sync-meta { white-space: normal; }
       .filters { grid-template-columns: 1fr 1fr; }
       .search-wrap { grid-column: 1 / -1; }
     }
@@ -241,6 +271,9 @@
       .distribution { padding: 17px; }
       .stage-grid { grid-template-columns: repeat(2, 1fr); }
       .schedule-list { grid-template-columns: 1fr; }
+      .job-list { grid-template-columns: 1fr; padding: 14px; }
+      .job-pool-head { align-items: stretch; flex-direction: column; }
+      .job-pool-actions { justify-content: flex-start; }
       .form-grid { grid-template-columns: 1fr; }
       .field.full { grid-column: auto; }
       .form-body { padding: 18px 18px 6px; }
@@ -257,6 +290,7 @@
       </div>
       <nav class="sidebar-nav">
         <a class="nav-item is-active" href="#overview"><span class="nav-icon">⌂</span><span>总览</span></a>
+        <a class="nav-item" href="#jobPool"><span class="nav-icon">⌕</span><span>岗位库</span></a>
         <a class="nav-item" href="#records"><span class="nav-icon">▤</span><span>投递记录</span></a>
         <a class="nav-item" href="#upcoming"><span class="nav-icon">□</span><span>未来安排</span></a>
         <button class="nav-item" id="sideScreenshotBtn" type="button"><span class="nav-icon">▣</span><span>截图识别</span></button>
@@ -294,6 +328,25 @@
         <div><h2 class="panel-title" id="distributionTitle">阶段分布</h2><div class="panel-caption">快速看看投递主要停留在哪一步</div></div>
       </div>
       <div class="stage-grid" id="stageGrid"></div>
+    </section>
+
+    <section class="panel job-pool" id="jobPool" aria-labelledby="jobPoolTitle">
+      <div class="panel-head job-pool-head">
+        <div>
+          <h2 class="panel-title" id="jobPoolTitle">岗位库</h2>
+          <div class="panel-caption">从每日更新的腾讯招聘文档发现岗位，确认投递后再加入管理记录</div>
+          <a class="job-source" href="https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&amp;viewId=vKWCWH" target="_blank" rel="noopener noreferrer">查看岗位来源 ↗</a>
+        </div>
+        <div class="job-pool-actions">
+          <button class="btn" id="clearJobPoolBtn" type="button">清空岗位库</button>
+          <button class="btn btn-primary" id="syncJobsBtn" type="button"><span class="icon">↻</span>同步腾讯文档</button>
+        </div>
+      </div>
+      <div class="job-pool-toolbar">
+        <div class="search-wrap"><span class="search-glyph">⌕</span><input class="control" id="jobSearchInput" type="search" placeholder="搜索公司、岗位或城市" aria-label="搜索岗位库"></div>
+        <div class="job-sync-meta" id="jobSyncMeta">尚未同步岗位</div>
+      </div>
+      <div class="job-list" id="jobList"></div>
     </section>
 
     <div class="dashboard">
@@ -380,6 +433,25 @@
     <div class="modal-actions"><button class="btn" id="cancelScreenshotDialog" type="button">取消</button><button class="btn btn-primary" id="startOcrBtn" type="button" disabled>开始识别</button></div>
   </dialog>
 
+  <dialog id="jobSyncDialog">
+    <div class="modal-head"><h2>同步腾讯招聘岗位</h2><button class="close-btn" id="closeJobSyncDialog" type="button" aria-label="关闭">×</button></div>
+    <div class="form-body">
+      <p class="capture-note">岗位只保存在你的浏览器本地。同步会读取公开招聘文档，不会上传你的投递记录，也不会自动替你投递。</p>
+      <div class="sync-steps">
+        <div class="sync-step"><span class="sync-step-number">1</span><div><strong>安装或更新“一键收录插件”</strong><span>腾讯文档有登录和跨站访问限制，需要插件在你的浏览器里读取。</span></div></div>
+        <div class="sync-step"><span class="sync-step-number">2</span><div><strong>点击下方“一键同步”</strong><span>插件会后台打开指定文档，读取岗位后自动关闭页面。</span></div></div>
+        <div class="sync-step"><span class="sync-step-number">3</span><div><strong>在岗位库里搜索并投递</strong><span>点击“记为已投递”后，才会写入正式投递记录。</span></div></div>
+      </div>
+      <div class="capture-status" id="jobSyncStatus" role="status" aria-live="polite">正在检查一键收录插件…</div>
+      <details class="sync-fallback">
+        <summary>插件暂时不可用？粘贴表格内容导入</summary>
+        <textarea class="control" id="jobPasteInput" placeholder="从腾讯文档复制多行岗位后粘贴到这里。建议包含：公司、岗位、城市、截止时间、投递链接。"></textarea>
+        <button class="btn btn-soft btn-small" id="importPastedJobsBtn" type="button">识别粘贴内容</button>
+      </details>
+    </div>
+    <div class="modal-actions"><button class="btn" id="cancelJobSyncDialog" type="button">取消</button><button class="btn btn-primary" id="startJobSyncBtn" type="button">一键同步</button></div>
+  </dialog>
+
   <dialog id="safetyDialog">
     <div class="modal-head"><h2>数据安全与恢复</h2><button class="close-btn" id="closeSafetyDialog" type="button" aria-label="关闭">×</button></div>
     <div class="form-body">
@@ -412,8 +484,11 @@
       const STAGES = ['待投递', '已投递', '笔试', '一面', '二面', 'HR面', 'Offer', '已结束'];
       // 永久兼容约定：后续版本不得更改或复用此键；字段升级统一通过 normalizeRecord 迁移。
       const STORAGE_KEY = 'autumnRecruitmentTracker.records.v1';
+      const JOB_POOL_KEY = 'autumnRecruitmentTracker.jobPool.v1';
+      const JOB_POOL_META_KEY = 'autumnRecruitmentTracker.jobPoolMeta.v1';
+      const QQ_JOB_DOC_URL = 'https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&viewId=vKWCWH';
       const SCHEMA_VERSION = 1;
-      const APP_VERSION = '2.4.0';
+      const APP_VERSION = '2.5.0';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
@@ -424,11 +499,14 @@
       };
       let primaryLoadState = 'unknown';
       let records = loadRecords();
+      let jobs = loadJobs();
+      let jobPoolUpdatedAt = loadJobPoolMeta();
       let editingId = null;
       let toastTimer;
       let bridgeReady = false;
       let bridgeCheckTimer;
       let captureTimer;
+      let jobSyncTimer;
       let safetyDbPromise;
       let backupFileHandle = null;
       let lastFileBackupAt = '';
@@ -502,6 +580,120 @@
           scheduleAt: String(item.scheduleAt || ''), recentSchedule: String(item.recentSchedule || ''),
           nextAction: String(item.nextAction || ''), updatedAt: Number(item.updatedAt) || Date.now()
         };
+      }
+
+      function stableJobId(job) {
+        const source = `${job.company}|${job.position}|${job.applicationUrl || ''}`.toLocaleLowerCase('zh-CN');
+        let hash = 2166136261;
+        for (let i = 0; i < source.length; i += 1) hash = Math.imul(hash ^ source.charCodeAt(i), 16777619);
+        return `job-${(hash >>> 0).toString(16)}`;
+      }
+
+      function normalizeJob(item) {
+        const job = {
+          company: String(item.company || '').trim().slice(0, 80),
+          position: String(item.position || '').trim().slice(0, 120),
+          city: String(item.city || '').trim().slice(0, 50),
+          deadline: String(item.deadline || '').trim().slice(0, 60),
+          category: String(item.category || '').trim().slice(0, 60),
+          applicationUrl: /^https?:\/\//i.test(String(item.applicationUrl || '').trim()) ? String(item.applicationUrl).trim() : '',
+          sourceUrl: QQ_JOB_DOC_URL,
+          sourceUpdatedAt: String(item.sourceUpdatedAt || new Date().toISOString())
+        };
+        return { id: String(item.id || stableJobId(job)), ...job };
+      }
+
+      function loadJobs() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(JOB_POOL_KEY) || '[]');
+          return Array.isArray(parsed) ? parsed.map(normalizeJob).filter(job => job.company && job.position) : [];
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function loadJobPoolMeta() {
+        try { return String(JSON.parse(localStorage.getItem(JOB_POOL_META_KEY) || '{}').updatedAt || ''); } catch (_) { return ''; }
+      }
+
+      function saveJobs(incoming, message = '') {
+        const merged = new Map(jobs.map(job => [job.id, job]));
+        incoming.map(normalizeJob).filter(job => job.company && job.position).forEach(job => merged.set(job.id, job));
+        jobs = [...merged.values()];
+        jobPoolUpdatedAt = new Date().toISOString();
+        localStorage.setItem(JOB_POOL_KEY, JSON.stringify(jobs));
+        localStorage.setItem(JOB_POOL_META_KEY, JSON.stringify({ updatedAt: jobPoolUpdatedAt, count: jobs.length, sourceUrl: QQ_JOB_DOC_URL }));
+        renderJobPool();
+        if (message) showToast(message);
+      }
+
+      function cleanJobCell(value) {
+        return String(value || '').replace(/\s+/g, ' ').replace(/^[|｜,，;；·•\-—\s]+|[|｜,，;；·•\-—\s]+$/g, '').trim();
+      }
+
+      function splitJobLine(line) {
+        const text = String(line || '').trim();
+        if (!text) return [];
+        const separator = text.includes('\t') ? /\t+/ : text.includes('|') || text.includes('｜') ? /[|｜]+/ : /[,，]+/;
+        return text.split(separator).map(cleanJobCell).filter(Boolean);
+      }
+
+      function parseJobRows(input) {
+        const rawRows = Array.isArray(input) ? input : String(input || '').split(/\r?\n/).map(line => ({ cells: splitJobLine(line), text: line, links: [] }));
+        const rows = rawRows.map(row => {
+          if (Array.isArray(row)) return { cells: row.map(cleanJobCell).filter(Boolean), text: row.join(' '), links: [] };
+          return {
+            cells: (Array.isArray(row?.cells) ? row.cells : splitJobLine(row?.text || '')).map(cleanJobCell).filter(Boolean),
+            text: cleanJobCell(row?.text || ''),
+            links: (Array.isArray(row?.links) ? row.links : []).filter(url => /^https?:\/\//i.test(String(url)))
+          };
+        }).filter(row => row.cells.length >= 2 || row.links.length);
+        if (!rows.length) return [];
+
+        const headerAliases = {
+          company: /公司|企业|单位|厂商|雇主/,
+          position: /岗位|职位|职务|方向/,
+          city: /城市|地点|地区|工作地/,
+          deadline: /截止|截止时间|网申时间|结束时间/,
+          category: /类型|性质|届次|批次|招聘类别/,
+          applicationUrl: /链接|投递|网申|申请|官网/
+        };
+        let headerIndex = -1;
+        let mapping = {};
+        rows.slice(0, 12).some((row, index) => {
+          const found = {};
+          row.cells.forEach((cell, cellIndex) => {
+            Object.entries(headerAliases).forEach(([field, pattern]) => { if (!(field in found) && pattern.test(cell)) found[field] = cellIndex; });
+          });
+          if ('company' in found && 'position' in found) { headerIndex = index; mapping = found; return true; }
+          return false;
+        });
+
+        const cities = ['北京','上海','广州','深圳','杭州','南京','苏州','成都','重庆','武汉','西安','长沙','天津','厦门','合肥','郑州','青岛','济南','宁波','无锡','珠海','佛山','东莞','福州','昆明','南昌','大连','沈阳','哈尔滨','石家庄','太原','贵阳','南宁','海口','兰州','乌鲁木齐','呼和浩特','长春','香港','澳门'];
+        const ignored = /腾讯文档|登录|注册|筛选|排序|视图|新建|分享|评论|工具栏|智能表格|加载中|搜索文档/;
+        const parsed = [];
+        rows.forEach((row, index) => {
+          if (index === headerIndex || (headerIndex >= 0 && index < headerIndex)) return;
+          const cells = row.cells.filter(cell => !/^https?:\/\//i.test(cell));
+          const get = field => Number.isInteger(mapping[field]) ? row.cells[mapping[field]] || '' : '';
+          const links = [...row.links, ...row.cells.filter(cell => /^https?:\/\//i.test(cell))];
+          let company = cleanJobCell(get('company'));
+          let position = cleanJobCell(get('position'));
+          let city = cleanJobCell(get('city'));
+          let deadline = cleanJobCell(get('deadline'));
+          let category = cleanJobCell(get('category'));
+          if (!company || !position) {
+            const useful = cells.filter(cell => cell.length >= 2 && cell.length <= 120 && !ignored.test(cell));
+            company ||= useful[0] || '';
+            position ||= useful.find((cell, cellIndex) => cellIndex > 0 && /实习|校招|管培|工程师|开发|算法|产品|运营|设计|销售|顾问|分析|研究|职能|岗位|招聘/.test(cell)) || useful[1] || '';
+          }
+          if (!city) city = cities.find(name => `${row.text} ${row.cells.join(' ')}`.includes(name)) || '';
+          if (!deadline) deadline = row.cells.find(cell => /(?:截止|长期|尽快|招满|20\d{2}[.\-/年]\d{1,2})/.test(cell)) || '';
+          if (!category) category = row.cells.find(cell => /暑期|日常实习|秋招|春招|校招|管培|提前批/.test(cell)) || '';
+          if (!company || !position || ignored.test(company) || ignored.test(position) || company === position) return;
+          parsed.push(normalizeJob({ company, position, city, deadline, category, applicationUrl: links[0] || '', sourceUpdatedAt: new Date().toISOString() }));
+        });
+        return [...new Map(parsed.map(job => [job.id, job])).values()];
       }
 
       function saveRecords(message) {
@@ -813,8 +1005,57 @@
       function render() {
         renderStats();
         renderDistribution();
+        renderJobPool();
         renderTable();
         renderUpcoming();
+      }
+
+      function renderJobPool() {
+        const keyword = $('#jobSearchInput').value.trim().toLocaleLowerCase('zh-CN');
+        const visible = jobs.filter(job => !keyword || `${job.company} ${job.position} ${job.city} ${job.category}`.toLocaleLowerCase('zh-CN').includes(keyword));
+        const shown = visible.slice(0, 60);
+        $('#jobSyncMeta').textContent = jobPoolUpdatedAt
+          ? `本地岗位 ${jobs.length} 条 · 最近同步 ${formatClock(jobPoolUpdatedAt)}${visible.length !== jobs.length ? ` · 找到 ${visible.length} 条` : ''}`
+          : '尚未同步岗位';
+        if (!shown.length) {
+          $('#jobList').innerHTML = `<div class="job-empty">${jobs.length ? '没有找到符合条件的岗位' : '点击“同步腾讯文档”，建立你的本地岗位库'}</div>`;
+          return;
+        }
+        $('#jobList').innerHTML = shown.map(job => {
+          const alreadyAdded = records.some(record => (job.applicationUrl && record.applicationUrl === job.applicationUrl) || (record.company === job.company && record.position === job.position));
+          return `<article class="job-card">
+            <div class="job-card-top"><div class="job-company" title="${escapeHtml(job.company)}">${escapeHtml(job.company)}</div>${job.city ? `<span class="job-city">${escapeHtml(job.city)}</span>` : ''}</div>
+            <div class="job-position">${escapeHtml(job.position)}</div>
+            <div class="job-extra">${escapeHtml([job.category, job.deadline ? `截止：${job.deadline}` : ''].filter(Boolean).join(' · ') || '来自腾讯招聘岗位文档')}</div>
+            <div class="job-card-actions">
+              ${job.applicationUrl ? `<a class="btn btn-small" href="${escapeHtml(job.applicationUrl)}" target="_blank" rel="noopener noreferrer">打开岗位</a>` : '<button class="btn btn-small" type="button" disabled>暂无链接</button>'}
+              <button class="btn btn-soft btn-small" data-job-action="applied" data-job-id="${escapeHtml(job.id)}" type="button" ${alreadyAdded ? 'disabled' : ''}>${alreadyAdded ? '已在记录中' : '记为已投递'}</button>
+            </div>
+          </article>`;
+        }).join('') + (visible.length > shown.length ? `<div class="job-empty">已显示前 ${shown.length} 条，请使用搜索快速定位岗位</div>` : '');
+      }
+
+      function handleJobAction(event) {
+        const button = event.target.closest('button[data-job-action]');
+        if (!button) return;
+        const job = jobs.find(item => item.id === button.dataset.jobId);
+        if (!job) return;
+        if (button.dataset.jobAction === 'applied') {
+          const duplicate = records.some(record => (job.applicationUrl && record.applicationUrl === job.applicationUrl) || (record.company === job.company && record.position === job.position));
+          if (duplicate) return showToast('这条岗位已经在投递记录中');
+          records.unshift(normalizeRecord({
+            company: job.company,
+            position: job.position,
+            city: job.city || '待确认',
+            applicationDate: localDateInput(new Date()),
+            stage: '已投递',
+            applicationUrl: job.applicationUrl,
+            nextAction: '关注招聘通知并及时跟进',
+            updatedAt: Date.now()
+          }));
+          saveRecords('已加入投递记录并自动保存');
+          render();
+        }
       }
 
       function renderStats() {
@@ -921,6 +1162,62 @@
         requestAnimationFrame(() => $('#captureUrlInput').focus());
       }
 
+      function openJobSyncDialog() {
+        const status = $('#jobSyncStatus');
+        status.className = 'capture-status';
+        status.textContent = '正在检查一键收录插件…';
+        $('#jobPasteInput').value = '';
+        $('#startJobSyncBtn').disabled = false;
+        bridgeReady = false;
+        window.postMessage({ source: 'AUTUMN_TRACKER', type: 'CAPTURE_PING', url: location.href.split('?')[0].split('#')[0] }, '*');
+        clearTimeout(bridgeCheckTimer);
+        bridgeCheckTimer = setTimeout(() => {
+          if (!bridgeReady) {
+            status.className = 'capture-status error';
+            status.textContent = '未连接到新版一键收录插件。请更新插件并刷新本页面，也可以展开下方入口粘贴表格内容。';
+          }
+        }, 1000);
+        $('#jobSyncDialog').showModal();
+      }
+
+      function closeJobSyncDialog() {
+        clearTimeout(bridgeCheckTimer);
+        clearTimeout(jobSyncTimer);
+        if ($('#jobSyncDialog').open) $('#jobSyncDialog').close();
+      }
+
+      function requestJobSync() {
+        const status = $('#jobSyncStatus');
+        if (!bridgeReady) {
+          status.className = 'capture-status error';
+          status.textContent = '插件尚未连接。请先更新插件并允许访问文件网址，或使用粘贴导入。';
+          return;
+        }
+        $('#startJobSyncBtn').disabled = true;
+        status.className = 'capture-status';
+        status.textContent = '正在读取腾讯招聘文档，岗位较多时可能需要半分钟…';
+        window.postMessage({ source: 'AUTUMN_TRACKER', type: 'SYNC_QQ_JOBS', url: QQ_JOB_DOC_URL }, '*');
+        clearTimeout(jobSyncTimer);
+        jobSyncTimer = setTimeout(() => {
+          $('#startJobSyncBtn').disabled = false;
+          status.className = 'capture-status error';
+          status.textContent = '同步等待超时。请确认腾讯文档可以正常打开、已登录，然后重试。';
+        }, 60000);
+      }
+
+      function importPastedJobs() {
+        const parsed = parseJobRows($('#jobPasteInput').value);
+        const status = $('#jobSyncStatus');
+        if (!parsed.length) {
+          status.className = 'capture-status error';
+          status.textContent = '没有识别到完整岗位。请尽量复制包含公司、岗位、城市和链接的多行表格。';
+          return;
+        }
+        saveJobs(parsed, `已导入 ${parsed.length} 条岗位`);
+        closeJobSyncDialog();
+        location.hash = '#jobPool';
+      }
+
       function closeCaptureDialog() {
         clearTimeout(bridgeCheckTimer);
         clearTimeout(captureTimer);
@@ -961,6 +1258,34 @@
           const status = $('#captureStatus');
           status.className = 'capture-status success';
           status.textContent = '插件已连接，可以开始识别。';
+          const jobStatus = $('#jobSyncStatus');
+          if (jobStatus) {
+            jobStatus.className = 'capture-status success';
+            jobStatus.textContent = '新版插件已连接，可以一键同步。';
+          }
+          return;
+        }
+        if (event.data.type === 'SYNC_JOBS_RESULT') {
+          clearTimeout(jobSyncTimer);
+          $('#startJobSyncBtn').disabled = false;
+          const parsed = parseJobRows(event.data.rows || event.data.data || []);
+          if (!parsed.length) {
+            const status = $('#jobSyncStatus');
+            status.className = 'capture-status error';
+            status.textContent = '文档已经打开，但没有识别到岗位。请确认当前账号可以查看该表，或使用粘贴导入。';
+            return;
+          }
+          saveJobs(parsed, `同步完成：识别到 ${parsed.length} 条岗位`);
+          closeJobSyncDialog();
+          location.hash = '#jobPool';
+          return;
+        }
+        if (event.data.type === 'SYNC_JOBS_ERROR') {
+          clearTimeout(jobSyncTimer);
+          $('#startJobSyncBtn').disabled = false;
+          const status = $('#jobSyncStatus');
+          status.className = 'capture-status error';
+          status.textContent = event.data.message || '同步失败，请确认腾讯文档可以正常打开后重试。';
           return;
         }
         if (event.data.type === 'CAPTURE_RESULT') {
@@ -1285,6 +1610,19 @@
       $('#captureUrlBtn').addEventListener('click', openCaptureDialog);
       $('#captureScreenshotBtn').addEventListener('click', openScreenshotDialog);
       $('#sideScreenshotBtn').addEventListener('click', openScreenshotDialog);
+      $('#syncJobsBtn').addEventListener('click', openJobSyncDialog);
+      $('#jobSearchInput').addEventListener('input', renderJobPool);
+      $('#jobList').addEventListener('click', handleJobAction);
+      $('#clearJobPoolBtn').addEventListener('click', () => {
+        if (!jobs.length) return showToast('岗位库目前是空的');
+        if (!confirm(`确定清空本地岗位库中的 ${jobs.length} 条岗位吗？\n你的正式投递记录不会受到影响。`)) return;
+        jobs = [];
+        jobPoolUpdatedAt = '';
+        localStorage.removeItem(JOB_POOL_KEY);
+        localStorage.removeItem(JOB_POOL_META_KEY);
+        renderJobPool();
+        showToast('岗位库已清空，投递记录未改变');
+      });
       $('#safetyBtn').addEventListener('click', openSafetyDialog);
       $('#sideSafetyBtn').addEventListener('click', openSafetyDialog);
       $('#exportBtn').addEventListener('click', exportData);
@@ -1306,6 +1644,11 @@
       $('#cancelCaptureDialog').addEventListener('click', closeCaptureDialog);
       $('#captureForm').addEventListener('submit', requestUrlCapture);
       $('#captureDialog').addEventListener('click', event => { if (event.target === $('#captureDialog')) closeCaptureDialog(); });
+      $('#closeJobSyncDialog').addEventListener('click', closeJobSyncDialog);
+      $('#cancelJobSyncDialog').addEventListener('click', closeJobSyncDialog);
+      $('#startJobSyncBtn').addEventListener('click', requestJobSync);
+      $('#importPastedJobsBtn').addEventListener('click', importPastedJobs);
+      $('#jobSyncDialog').addEventListener('click', event => { if (event.target === $('#jobSyncDialog')) closeJobSyncDialog(); });
       $('#closeScreenshotDialog').addEventListener('click', closeScreenshotDialog);
       $('#cancelScreenshotDialog').addEventListener('click', closeScreenshotDialog);
       $('#startOcrBtn').addEventListener('click', recognizeScreenshot);
