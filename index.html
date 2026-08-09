@@ -66,13 +66,14 @@
     .btn-small { min-height: 34px; padding: 0 11px; border-radius: 9px; font-size: 13px; }
     .icon { margin-right: 6px; }
 
-    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
     .stat-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
     .stat-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 14px; }
     .stat-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px; background: var(--primary-soft); color: var(--primary); }
-    .stat-card:nth-child(2) .stat-icon { background: #edf8ff; color: #2988bf; }
-    .stat-card:nth-child(3) .stat-icon { background: var(--amber-soft); color: var(--amber); }
-    .stat-card:nth-child(4) .stat-icon { background: var(--green-soft); color: var(--green); }
+    .stat-card:nth-child(2) .stat-icon { background: #fff1e7; color: #d66f25; }
+    .stat-card:nth-child(3) .stat-icon { background: #edf8ff; color: #2988bf; }
+    .stat-card:nth-child(4) .stat-icon { background: var(--amber-soft); color: var(--amber); }
+    .stat-card:nth-child(5) .stat-icon { background: var(--green-soft); color: var(--green); }
     .stat-number { font-size: 32px; font-weight: 760; margin-top: 10px; letter-spacing: -.03em; }
 
     .dashboard { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 20px; align-items: start; }
@@ -85,11 +86,11 @@
     .distribution { padding: 20px 22px 22px; margin-bottom: 20px; }
     .distribution .panel-head { padding: 0 0 17px; border: 0; }
     .stage-grid { display: grid; grid-template-columns: repeat(8, minmax(72px, 1fr)); gap: 10px; }
-    .stage-cell { min-width: 0; }
-    .stage-meta { display: flex; justify-content: space-between; gap: 5px; margin-bottom: 7px; color: var(--muted); font-size: 12px; }
+    .stage-cell { min-width: 0; padding: 10px; border: 1px solid var(--stage-border, var(--line)); border-radius: 12px; background: var(--stage-soft, var(--surface-soft)); }
+    .stage-meta { display: flex; justify-content: space-between; gap: 5px; margin-bottom: 7px; color: var(--stage-color, var(--muted)); font-size: 12px; }
     .stage-meta span:first-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bar { height: 8px; background: #edf0f6; border-radius: 999px; overflow: hidden; }
-    .bar-fill { height: 100%; min-width: 0; border-radius: inherit; background: linear-gradient(90deg, #8290ef, #5367e9); transition: width .25s ease; }
+    .bar-fill { height: 100%; min-width: 0; border-radius: inherit; background: var(--stage-color, var(--primary)); transition: width .25s ease; }
 
     .filters { display: grid; grid-template-columns: minmax(180px, 1fr) 150px 190px; gap: 10px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
     .control { width: 100%; min-height: 42px; border: 1px solid var(--line); border-radius: 11px; padding: 9px 12px; color: var(--ink); background: #fff; }
@@ -111,10 +112,15 @@
     .schedule-time { font-weight: 650; }
     .schedule-text, .next-action { color: var(--muted); font-size: 13px; margin-top: 2px; overflow-wrap: anywhere; }
     .overdue { color: var(--red); }
-    .badge { display: inline-flex; align-items: center; min-height: 28px; padding: 3px 10px; border-radius: 999px; background: var(--primary-soft); color: var(--primary-dark); font-size: 12px; font-weight: 720; white-space: nowrap; }
-    .badge[data-stage="待投递"] { background: #f1f2f5; color: #606a79; }
-    .badge[data-stage="Offer"] { background: var(--green-soft); color: #17825b; }
-    .badge[data-stage="已结束"] { background: var(--red-soft); color: #b94747; }
+    .badge { display: inline-flex; align-items: center; min-height: 28px; padding: 3px 10px; border: 1px solid var(--stage-border, transparent); border-radius: 8px; background: var(--stage-soft, var(--primary-soft)); color: var(--stage-color, var(--primary-dark)); font-size: 12px; font-weight: 760; white-space: nowrap; }
+    .stage-cell[data-stage="待投递"], .badge[data-stage="待投递"] { --stage-color: #657084; --stage-soft: #f0f2f5; --stage-border: #d9dee7; }
+    .stage-cell[data-stage="已投递"], .badge[data-stage="已投递"] { --stage-color: #356fd6; --stage-soft: #edf4ff; --stage-border: #cadcff; }
+    .stage-cell[data-stage="笔试"], .badge[data-stage="笔试"] { --stage-color: #b87812; --stage-soft: #fff5df; --stage-border: #f1dba9; }
+    .stage-cell[data-stage="一面"], .badge[data-stage="一面"] { --stage-color: #16869f; --stage-soft: #eaf8fb; --stage-border: #bfe5ec; }
+    .stage-cell[data-stage="二面"], .badge[data-stage="二面"] { --stage-color: #6c52bd; --stage-soft: #f2efff; --stage-border: #d9d0fa; }
+    .stage-cell[data-stage="HR面"], .badge[data-stage="HR面"] { --stage-color: #b54889; --stage-soft: #fff0f8; --stage-border: #f0c9df; }
+    .stage-cell[data-stage="Offer"], .badge[data-stage="Offer"] { --stage-color: #17825b; --stage-soft: #e9f8f2; --stage-border: #bde7d5; }
+    .stage-cell[data-stage="已结束"], .badge[data-stage="已结束"] { --stage-color: #b94747; --stage-soft: #fff0f0; --stage-border: #f0c8c8; }
     .row-actions { display: flex; gap: 7px; white-space: nowrap; }
     .text-button { min-height: 30px; padding: 3px 6px; background: transparent; border: 0; color: var(--muted); font-size: 13px; border-radius: 7px; }
     .text-button:hover { color: var(--primary); background: var(--primary-soft); }
@@ -230,6 +236,7 @@
 
     <section class="stats" aria-label="投递概览">
       <article class="stat-card"><div class="stat-top"><span>投递总数</span><span class="stat-icon">▤</span></div><div class="stat-number" id="totalCount">0</div></article>
+      <article class="stat-card"><div class="stat-top"><span>今日投递</span><span class="stat-icon">＋</span></div><div class="stat-number" id="todayCount">0</div></article>
       <article class="stat-card"><div class="stat-top"><span>进行中的流程</span><span class="stat-icon">↻</span></div><div class="stat-number" id="activeCount">0</div></article>
       <article class="stat-card"><div class="stat-top"><span>七天内安排</span><span class="stat-icon">□</span></div><div class="stat-number" id="weekCount">0</div></article>
       <article class="stat-card"><div class="stat-top"><span>Offer 数量</span><span class="stat-icon">✓</span></div><div class="stat-number" id="offerCount">0</div></article>
@@ -358,11 +365,11 @@
       // 永久兼容约定：后续版本不得更改或复用此键；字段升级统一通过 normalizeRecord 迁移。
       const STORAGE_KEY = 'autumnRecruitmentTracker.records.v1';
       const SCHEMA_VERSION = 1;
-      const APP_VERSION = '2.2.0';
+      const APP_VERSION = '2.3.0';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
-        total: $('#totalCount'), active: $('#activeCount'), week: $('#weekCount'), offer: $('#offerCount'),
+        total: $('#totalCount'), today: $('#todayCount'), active: $('#activeCount'), week: $('#weekCount'), offer: $('#offerCount'),
         stageGrid: $('#stageGrid'), body: $('#recordBody'), empty: $('#emptyState'), caption: $('#resultCaption'),
         upcoming: $('#upcomingList'), search: $('#searchInput'), filter: $('#stageFilter'), sort: $('#sortSelect'),
         dialog: $('#recordDialog'), form: $('#recordForm'), dialogTitle: $('#dialogTitle'), toast: $('#toast')
@@ -766,6 +773,7 @@
         const now = new Date();
         const sevenDays = new Date(now.getTime() + 7 * 86400000);
         els.total.textContent = records.length;
+        els.today.textContent = records.filter(r => r.applicationDate === localDateInput(now)).length;
         els.active.textContent = records.filter(isActive).length;
         els.week.textContent = records.filter(r => { const d = parseLocal(r.scheduleAt); return d && d >= now && d <= sevenDays; }).length;
         els.offer.textContent = records.filter(r => r.stage === 'Offer').length;
@@ -775,9 +783,9 @@
         const counts = Object.fromEntries(STAGES.map(stage => [stage, records.filter(r => r.stage === stage).length]));
         const max = Math.max(1, ...Object.values(counts));
         els.stageGrid.innerHTML = STAGES.map(stage => `
-          <div class="stage-cell" title="${escapeHtml(stage)}：${counts[stage]} 条">
+          <div class="stage-cell" data-stage="${escapeHtml(stage)}" title="${escapeHtml(stage)}：${counts[stage]} 条">
             <div class="stage-meta"><span>${escapeHtml(stage)}</span><strong>${counts[stage]}</strong></div>
-            <div class="bar"><div class="bar-fill" style="width:${counts[stage] / max * 100}%"></div></div>
+            <div class="bar"><div class="bar-fill" data-stage="${escapeHtml(stage)}" style="width:${counts[stage] / max * 100}%"></div></div>
           </div>`).join('');
       }
 
