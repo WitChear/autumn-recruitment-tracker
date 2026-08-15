@@ -191,9 +191,13 @@
     .ocr-preview-card img { display: block; width: 100%; height: 92px; object-fit: cover; background: #eef1f7; }
     .ocr-preview-name { padding: 6px 8px; overflow: hidden; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
     .ocr-results { display: grid; gap: 9px; max-height: 280px; margin-top: 13px; overflow: auto; }
-    .ocr-result-card { display: grid; grid-template-columns: 24px 1fr 1.35fr .7fr; gap: 8px; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-soft); }
+    .ocr-result-card { padding: 10px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-soft); }
+    .ocr-result-fields { display: grid; grid-template-columns: 24px 1fr 1.35fr .7fr .95fr; gap: 8px; align-items: center; }
     .ocr-result-card .control { min-width: 0; padding: 8px 9px; font-size: 12px; }
     .ocr-result-check { width: 17px; height: 17px; accent-color: var(--primary); }
+    .ocr-raw { margin: 8px 0 0 32px; color: var(--muted); font-size: 12px; }
+    .ocr-raw summary { cursor: pointer; color: var(--primary); font-weight: 650; }
+    .ocr-raw pre { max-height: 120px; margin: 7px 0 0; padding: 9px; overflow: auto; border-radius: 8px; background: #fff; color: #566078; font: 11px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
     .ocr-progress { height: 8px; margin-top: 13px; overflow: hidden; border-radius: 999px; background: #e9edf5; }
     .ocr-progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7182f2, #5367e9); transition: width .2s ease; }
     .safety-summary { display: grid; gap: 10px; margin-bottom: 18px; }
@@ -283,8 +287,8 @@
       .job-pool-head { align-items: stretch; flex-direction: column; }
       .job-pool-actions { justify-content: flex-start; }
       .ocr-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .ocr-result-card { grid-template-columns: 22px 1fr; }
-      .ocr-result-card [data-field="position"], .ocr-result-card [data-field="city"] { grid-column: 2; }
+      .ocr-result-fields { grid-template-columns: 22px 1fr; }
+      .ocr-result-fields [data-field="position"], .ocr-result-fields [data-field="city"], .ocr-result-fields [data-field="applicationDate"] { grid-column: 2; }
       .form-grid { grid-template-columns: 1fr; }
       .field.full { grid-column: auto; }
       .form-body { padding: 18px 18px 6px; }
@@ -432,14 +436,14 @@
   <dialog id="screenshotDialog">
     <div class="modal-head"><h2>批量截图识别岗位</h2><button class="close-btn" id="closeScreenshotDialog" type="button" aria-label="关闭">×</button></div>
     <div class="form-body">
-      <p class="capture-note">一次选择多张岗位详情或投递页面截图。识别完全在浏览器本地完成，图片不会上传；结果确认后只进入岗位库，不会自动变成投递记录。</p>
+      <p class="capture-note">直接复制截图后按 Command + V 粘贴，也可以一次选择多张图片。识别完全在浏览器本地完成，不会上传；无法确认的日期会保持空白。</p>
       <div class="ocr-dropzone" id="ocrDropzone" role="button" tabindex="0" aria-label="选择多张岗位截图">
-        <div id="ocrEmptyState"><div class="ocr-dropzone-icon">▧</div><div class="ocr-dropzone-title">点击选择多张截图，或一起拖到这里</div><div class="ocr-dropzone-help">支持 PNG、JPG、WEBP；最多 20 张，建议每张截图展示一个岗位</div></div>
+        <div id="ocrEmptyState"><div class="ocr-dropzone-icon">▧</div><div class="ocr-dropzone-title">粘贴、点击选择，或把多张截图拖到这里</div><div class="ocr-dropzone-help">复制图片后按 Command + V；支持 PNG、JPG、WEBP，最多 20 张</div></div>
         <div class="ocr-preview-grid" id="ocrPreviewGrid" hidden></div>
       </div>
       <input id="ocrFileInput" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
       <div class="ocr-progress" id="ocrProgress" hidden><div class="ocr-progress-fill" id="ocrProgressFill"></div></div>
-      <div class="capture-status" id="ocrStatus" role="status" aria-live="polite">请选择一张或多张截图。</div>
+      <div class="capture-status" id="ocrStatus" role="status" aria-live="polite">按 Command + V 粘贴截图，或选择一张或多张图片。</div>
       <div class="ocr-results" id="ocrResults" hidden></div>
     </div>
     <div class="modal-actions"><button class="btn" id="cancelScreenshotDialog" type="button">取消</button><button class="btn btn-primary" id="startOcrBtn" type="button" disabled>开始批量识别</button></div>
@@ -500,7 +504,7 @@
       const JOB_POOL_META_KEY = 'autumnRecruitmentTracker.jobPoolMeta.v1';
       const QQ_JOB_DOC_URL = 'https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&viewId=vKWCWH';
       const SCHEMA_VERSION = 1;
-      const APP_VERSION = '2.6.0';
+      const APP_VERSION = '2.7.0';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
@@ -609,6 +613,7 @@
           city: String(item.city || '').trim().slice(0, 50),
           deadline: String(item.deadline || '').trim().slice(0, 60),
           category: String(item.category || '').trim().slice(0, 60),
+          applicationDate: /^20\d{2}-\d{2}-\d{2}$/.test(String(item.applicationDate || '')) ? String(item.applicationDate) : '',
           applicationUrl: /^https?:\/\//i.test(String(item.applicationUrl || '').trim()) ? String(item.applicationUrl).trim() : '',
           sourceUrl: QQ_JOB_DOC_URL,
           sourceUpdatedAt: String(item.sourceUpdatedAt || new Date().toISOString())
@@ -1060,7 +1065,7 @@
             company: job.company,
             position: job.position,
             city: job.city || '待确认',
-            applicationDate: localDateInput(new Date()),
+            applicationDate: job.category === '截图识别' ? (job.applicationDate || '') : localDateInput(new Date()),
             stage: '已投递',
             applicationUrl: job.applicationUrl,
             nextAction: '关注招聘通知并及时跟进',
@@ -1348,7 +1353,7 @@
         $('#ocrProgress').hidden = true;
         $('#ocrProgressFill').style.width = '0%';
         $('#ocrStatus').className = 'capture-status';
-        $('#ocrStatus').textContent = '请选择一张或多张截图。';
+        $('#ocrStatus').textContent = '按 Command + V 粘贴截图，或选择一张或多张图片。';
         $('#startOcrBtn').textContent = '开始批量识别';
         $('#startOcrBtn').disabled = true;
       }
@@ -1363,11 +1368,13 @@
         resetScreenshotDialog();
       }
 
-      function selectScreenshots(fileList) {
+      function selectScreenshots(fileList, append = false) {
         const status = $('#ocrStatus');
         const selected = [...(fileList || [])];
         if (!selected.length) return;
-        const valid = selected.filter(file => /^image\/(png|jpeg|webp)$/i.test(file.type) && file.size <= 18 * 1024 * 1024).slice(0, 20);
+        const priorCount = append ? ocrFiles.length : 0;
+        const accepted = selected.filter(file => /^image\/(png|jpeg|webp)$/i.test(file.type) && file.size <= 18 * 1024 * 1024);
+        const valid = (append ? [...ocrFiles, ...accepted] : accepted).slice(0, 20);
         if (!valid.length) {
           status.className = 'capture-status error';
           status.textContent = '请选择小于 18 MB 的 PNG、JPG 或 WEBP 图片。';
@@ -1386,7 +1393,7 @@
         $('#ocrProgress').hidden = true;
         $('#ocrProgressFill').style.width = '0%';
         status.className = 'capture-status';
-        const skipped = selected.length - valid.length;
+        const skipped = Math.max(0, selected.length - accepted.length) + Math.max(0, priorCount + accepted.length - 20);
         status.textContent = `已选择 ${valid.length} 张截图${skipped > 0 ? `，另有 ${skipped} 张因格式、大小或数量限制被忽略` : ''}。`;
         $('#startOcrBtn').textContent = '开始批量识别';
         $('#startOcrBtn').disabled = false;
@@ -1395,10 +1402,14 @@
       function renderOcrCandidates() {
         $('#ocrResults').hidden = false;
         $('#ocrResults').innerHTML = ocrCandidates.map((job, index) => `<div class="ocr-result-card" data-ocr-index="${index}">
-          <input class="ocr-result-check" type="checkbox" checked aria-label="选择第 ${index + 1} 条岗位">
-          <input class="control" data-field="company" value="${escapeHtml(job.company)}" placeholder="公司">
-          <input class="control" data-field="position" value="${escapeHtml(job.position)}" placeholder="岗位">
-          <input class="control" data-field="city" value="${escapeHtml(job.city)}" placeholder="城市">
+          <div class="ocr-result-fields">
+            <input class="ocr-result-check" type="checkbox" checked aria-label="选择第 ${index + 1} 条岗位">
+            <input class="control" data-field="company" value="${escapeHtml(job.company)}" placeholder="公司" aria-label="公司">
+            <input class="control" data-field="position" value="${escapeHtml(job.position)}" placeholder="岗位（请重点检查）" aria-label="岗位">
+            <input class="control" data-field="city" value="${escapeHtml(job.city)}" placeholder="城市" aria-label="城市">
+            <input class="control" data-field="applicationDate" type="date" value="${escapeHtml(job.applicationDate || '')}" aria-label="投递日期" title="未识别到时保持空白">
+          </div>
+          <details class="ocr-raw"><summary>查看识别原文</summary><pre>${escapeHtml(job.rawText || '未读取到清晰文字')}</pre></details>
         </div>`).join('');
       }
 
@@ -1407,6 +1418,7 @@
           company: card.querySelector('[data-field="company"]').value,
           position: card.querySelector('[data-field="position"]').value,
           city: card.querySelector('[data-field="city"]').value,
+          applicationDate: card.querySelector('[data-field="applicationDate"]').value,
           category: '截图识别'
         })).filter(job => job.company && job.position);
         if (!selected.length) {
@@ -1471,13 +1483,19 @@
       }
 
       function parseOcrDate(text) {
-        const labelled = text.match(/(?:投递|申请|提交)(?:日期|时间)?\s*[:：]?\s*(20\d{2})\s*[年/.\-]\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?/);
-        const generic = text.match(/(20\d{2})\s*[年/.\-]\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?/);
+        const labelled = text.match(/(?:投递|申请|提交|创建)(?:日期|时间)?\s*[:：]?\s*(20\d{2})\s*[年/.\-]\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?/);
+        const genericDates = [...text.matchAll(/(20\d{2})\s*[年/.\-]\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?/g)];
+        const generic = /(?:已投递|投递成功|申请成功|已申请)/.test(text) && genericDates.length === 1 ? genericDates[0] : null;
+        const shortLabelled = text.match(/(?:投递|申请|提交|创建)(?:日期|时间)?\s*[:：]?\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?/);
         const parts = labelled || generic;
-        if (!parts) return localDateInput(new Date());
-        const month = String(Math.min(12, Math.max(1, Number(parts[2])))).padStart(2, '0');
-        const day = String(Math.min(31, Math.max(1, Number(parts[3])))).padStart(2, '0');
-        return `${parts[1]}-${month}-${day}`;
+        if (!parts && !shortLabelled) return '';
+        const year = parts ? parts[1] : String(new Date().getFullYear());
+        const source = parts || shortLabelled;
+        const monthIndex = parts ? 2 : 1;
+        const dayIndex = parts ? 3 : 2;
+        const month = String(Math.min(12, Math.max(1, Number(source[monthIndex])))).padStart(2, '0');
+        const day = String(Math.min(31, Math.max(1, Number(source[dayIndex])))).padStart(2, '0');
+        return `${year}-${month}-${day}`;
       }
 
       function parseOcrStage(text) {
@@ -1493,14 +1511,26 @@
 
       function parseScreenshotText(rawText) {
         const text = String(rawText || '').replace(/\r/g, '').replace(/[ \t]+/g, ' ').trim();
-        const lines = text.split('\n').map(line => cleanOcrCandidate(line, 100)).filter(line => line.length >= 2);
-        let company = matchOcrLabel(text, ['公司(?:名称)?', '企业(?:名称)?', '招聘单位', '应聘公司'], 60);
-        let position = matchOcrLabel(text, ['投递岗位', '应聘岗位', '应聘职位', '岗位(?:名称)?', '职位(?:名称)?'], 80);
-        let city = matchOcrLabel(text, ['工作城市', '工作地点', '投递城市', '城市', '地点'], 30);
-        if (!company) company = lines.find(line => /(?:公司|集团|科技|银行|证券|咨询|智能|互娱|网络|汽车|电子|传媒|研究院)/.test(line) && line.length <= 45) || '';
-        if (!position) position = lines.find(line => /(?:工程师|经理|运营|设计师|分析师|顾问|开发|算法|产品|实习|管培生|专员|研究员)/.test(line) && line.length <= 60) || '';
+        const lines = text.split('\n').map(line => cleanOcrCandidate(line, 120)).filter(line => line.length >= 2);
+        const noise = /^(?:首页|返回|搜索|登录|注册|分享|收藏|消息|全部|筛选|职位详情|岗位详情|招聘详情|申请记录|投递记录|我的申请|工作职责|职位描述|岗位职责|任职要求|职位要求|福利待遇|关于我们)$/i;
+        const positionWords = /(?:工程师|经理|运营|设计师|分析师|顾问|开发|算法|产品|销售|商务|市场|营销|商业化|策略|行业|客户|供应链|财务|人力|法务|测试|数据|项目|采购|管培|校招生|实习生|专员|研究员|策划|编辑|审计|助理|负责人|Job\s*Title|Position)/i;
+        const companyWords = /(?:公司|集团|科技|银行|证券|咨询|智能|互娱|网络|汽车|电子|传媒|研究院|事务所|有限公司|股份|控股|能源|医药|生物|教育|基金|保险|物流|航空|地产)/;
+        let company = matchOcrLabel(text, ['公司(?:名称)?', '企业(?:名称)?', '招聘单位', '应聘公司', 'Company'], 60);
+        let position = matchOcrLabel(text, ['投递岗位', '应聘岗位', '应聘职位', '岗位(?:名称)?', '职位(?:名称)?', 'Job\\s*Title', 'Position'], 80);
+        let city = matchOcrLabel(text, ['工作城市', '工作地点', '投递城市', '城市', '地点', 'Location'], 30);
+        const usable = lines.map((line, index) => ({ line, index })).filter(item => !noise.test(item.line));
+        if (!company) {
+          company = usable.map(item => ({ ...item, score: (companyWords.test(item.line) ? 35 : 0) + (item.index < 10 ? 10 : 0) + (item.line.length <= 36 ? 8 : -15) - (positionWords.test(item.line) ? 10 : 0) }))
+            .filter(item => item.score >= 25).sort((a, b) => b.score - a.score || a.index - b.index)[0]?.line || '';
+        }
+        if (!position) {
+          position = usable.map(item => ({ ...item, score: (positionWords.test(item.line) ? 40 : 0) + (item.index < 14 ? 10 : 0) + (item.line.length >= 3 && item.line.length <= 50 ? 10 : -20) - (companyWords.test(item.line) ? 8 : 0) }))
+            .filter(item => item.score >= 35).sort((a, b) => b.score - a.score || a.index - b.index)[0]?.line || '';
+        }
+        company = String(company).split(/(?:岗位|职位|工作地点|城市|申请|投递)/)[0];
+        position = String(position).split(/(?:工作地点|城市|职位类别|岗位类别|申请时间|投递时间|发布日期)/)[0];
         if (!city) {
-          const knownCities = ['北京', '上海', '广州', '深圳', '杭州', '南京', '苏州', '成都', '重庆', '武汉', '西安', '天津', '长沙', '厦门', '合肥', '青岛', '宁波', '郑州', '珠海', '佛山', '东莞', '无锡'];
+          const knownCities = ['北京', '上海', '广州', '深圳', '杭州', '南京', '苏州', '成都', '重庆', '武汉', '西安', '天津', '长沙', '厦门', '合肥', '青岛', '宁波', '郑州', '珠海', '佛山', '东莞', '无锡', '济南', '福州', '昆明', '南昌', '大连', '沈阳', '长春', '哈尔滨', '全国', '远程'];
           city = knownCities.find(name => text.includes(name)) || '';
         }
         return normalizeRecord({
@@ -1511,6 +1541,22 @@
           stage: parseOcrStage(text),
           nextAction: '检查识别结果，并关注后续通知'
         });
+      }
+
+      async function prepareOcrImage(file) {
+        if (!window.createImageBitmap) return file;
+        const bitmap = await createImageBitmap(file);
+        const scale = Math.max(1, Math.min(2, 2600 / Math.max(1, bitmap.width)));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(bitmap.width * scale);
+        canvas.height = Math.round(bitmap.height * scale);
+        const context = canvas.getContext('2d', { alpha: false });
+        context.fillStyle = '#fff';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.filter = 'grayscale(1) contrast(1.3)';
+        context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        bitmap.close?.();
+        return new Promise(resolve => canvas.toBlob(blob => resolve(blob || file), 'image/png'));
       }
 
       function describeOcrProgress(message) {
@@ -1557,14 +1603,17 @@
           for (let index = 0; index < ocrFiles.length; index += 1) {
             if (!ocrRunning) break;
             status.textContent = `正在识别第 ${index + 1}/${ocrFiles.length} 张：${ocrFiles[index].name || '岗位截图'}…`;
-            const result = await ocrWorker.recognize(ocrFiles[index]);
-            const seed = parseScreenshotText(result?.data?.text || '');
-            if (seed.company || seed.position) recognized.push(normalizeJob({
+            const preparedImage = await prepareOcrImage(ocrFiles[index]);
+            const result = await ocrWorker.recognize(preparedImage);
+            const rawText = String(result?.data?.text || '').trim();
+            const seed = parseScreenshotText(rawText);
+            if (seed.company || seed.position || rawText) recognized.push({ ...normalizeJob({
               company: seed.company,
               position: seed.position,
               city: seed.city,
+              applicationDate: seed.applicationDate,
               category: '截图识别'
-            }));
+            }), rawText: rawText.slice(0, 3000) });
             $('#ocrProgressFill').style.width = `${Math.round(((index + 1) / ocrFiles.length) * 100)}%`;
           }
           await ocrWorker.terminate();
@@ -1574,7 +1623,7 @@
           if (!recognized.length) {
             $('#startOcrBtn').disabled = false;
             status.className = 'capture-status error';
-            status.textContent = '没有识别到公司或岗位，请换用更清晰、文字更大的截图。';
+            status.textContent = '没有读取到清晰文字。建议只截取公司、岗位和投递信息区域后重新粘贴。';
             return;
           }
           renderOcrCandidates();
@@ -1728,6 +1777,17 @@
         if (!ocrRunning && ['Enter', ' '].includes(event.key)) { event.preventDefault(); $('#ocrFileInput').click(); }
       });
       $('#ocrFileInput').addEventListener('change', event => selectScreenshots(event.target.files));
+      window.addEventListener('paste', event => {
+        if (!$('#screenshotDialog').open || ocrRunning) return;
+        const imageFiles = [...(event.clipboardData?.items || [])]
+          .filter(item => item.kind === 'file' && /^image\//i.test(item.type))
+          .map(item => item.getAsFile()).filter(Boolean);
+        if (!imageFiles.length) return;
+        event.preventDefault();
+        selectScreenshots(imageFiles, true);
+        $('#ocrStatus').className = 'capture-status success';
+        $('#ocrStatus').textContent = `已从剪贴板粘贴图片，目前共 ${ocrFiles.length} 张。`;
+      });
       for (const type of ['dragenter', 'dragover']) {
         $('#ocrDropzone').addEventListener(type, event => { event.preventDefault(); if (!ocrRunning) $('#ocrDropzone').classList.add('is-dragging'); });
       }
