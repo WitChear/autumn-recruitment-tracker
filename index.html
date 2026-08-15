@@ -504,7 +504,7 @@
       const JOB_POOL_META_KEY = 'autumnRecruitmentTracker.jobPoolMeta.v1';
       const QQ_JOB_DOC_URL = 'https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&viewId=vKWCWH';
       const SCHEMA_VERSION = 1;
-      const APP_VERSION = '2.7.0';
+      const APP_VERSION = '2.7.1';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
@@ -1476,6 +1476,17 @@
           .slice(0, maxLength);
       }
 
+      function normalizeOcrTitle(value) {
+        let title = cleanOcrCandidate(value, 80)
+          .replace(/[［[]/g, '【').replace(/[］\]]/g, '】')
+          .replace(/【+/g, '【').replace(/】+/g, '】')
+          .replace(/\s*【\s*/g, '【').replace(/\s*】\s*/g, '】')
+          .replace(/([\u3400-\u9fff])\s+(?=[\u3400-\u9fff])/g, '$1')
+          .replace(/(\d)\s+(?=[\u3400-\u9fff])/g, '$1');
+        title = title.replace(/([\u3400-\u9fff])\s+(?=[\u3400-\u9fff])/g, '$1');
+        return title;
+      }
+
       function matchOcrLabel(text, labels, maxLength) {
         const labelGroup = labels.join('|');
         const match = text.match(new RegExp(`(?:${labelGroup})\\s*[:：]?\\s*([^\\n]{2,${maxLength}})`, 'i'));
@@ -1484,10 +1495,11 @@
 
       function parseOcrDate(text) {
         const labelled = text.match(/(?:投递|申请|提交|创建)(?:日期|时间)?\s*[:：]?\s*(20\d{2})\s*[年/.\-]\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?/);
+        const dateBeforeLabel = text.match(/(20\d{2})\s*[年/.\-]\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?\s*(?:投递|申请|提交|创建)/);
         const genericDates = [...text.matchAll(/(20\d{2})\s*[年/.\-]\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?/g)];
         const generic = /(?:已投递|投递成功|申请成功|已申请)/.test(text) && genericDates.length === 1 ? genericDates[0] : null;
         const shortLabelled = text.match(/(?:投递|申请|提交|创建)(?:日期|时间)?\s*[:：]?\s*(\d{1,2})\s*[月/.\-]\s*(\d{1,2})\s*日?/);
-        const parts = labelled || generic;
+        const parts = labelled || dateBeforeLabel || generic;
         if (!parts && !shortLabelled) return '';
         const year = parts ? parts[1] : String(new Date().getFullYear());
         const source = parts || shortLabelled;
@@ -1511,6 +1523,7 @@
 
       function parseScreenshotText(rawText) {
         const text = String(rawText || '').replace(/\r/g, '').replace(/[ \t]+/g, ' ').trim();
+        const compactText = text.replace(/\s+/g, '');
         const lines = text.split('\n').map(line => cleanOcrCandidate(line, 120)).filter(line => line.length >= 2);
         const noise = /^(?:首页|返回|搜索|登录|注册|分享|收藏|消息|全部|筛选|职位详情|岗位详情|招聘详情|申请记录|投递记录|我的申请|工作职责|职位描述|岗位职责|任职要求|职位要求|福利待遇|关于我们)$/i;
         const positionWords = /(?:工程师|经理|运营|设计师|分析师|顾问|开发|算法|产品|销售|商务|市场|营销|商业化|策略|行业|客户|供应链|财务|人力|法务|测试|数据|项目|采购|管培|校招生|实习生|专员|研究员|策划|编辑|审计|助理|负责人|Job\s*Title|Position)/i;
@@ -1528,14 +1541,15 @@
             .filter(item => item.score >= 35).sort((a, b) => b.score - a.score || a.index - b.index)[0]?.line || '';
         }
         company = String(company).split(/(?:岗位|职位|工作地点|城市|申请|投递)/)[0];
-        position = String(position).split(/(?:工作地点|城市|职位类别|岗位类别|申请时间|投递时间|发布日期)/)[0];
+        position = String(position)
+          .split(/(?:撤\s*回\s*投\s*递|更\s*新\s*简\s*历|重\s*新\s*投\s*递|取\s*消\s*申\s*请|官\s*网\s*主\s*投|初\s*筛\s*中|筛\s*选\s*中|已\s*投\s*递|工作地点|城市|职位类别|岗位类别|申请时间|投递时间|发布日期)/)[0];
         if (!city) {
           const knownCities = ['北京', '上海', '广州', '深圳', '杭州', '南京', '苏州', '成都', '重庆', '武汉', '西安', '天津', '长沙', '厦门', '合肥', '青岛', '宁波', '郑州', '珠海', '佛山', '东莞', '无锡', '济南', '福州', '昆明', '南昌', '大连', '沈阳', '长春', '哈尔滨', '全国', '远程'];
-          city = knownCities.find(name => text.includes(name)) || '';
+          city = knownCities.find(name => compactText.includes(name)) || '';
         }
         return normalizeRecord({
           company: cleanOcrCandidate(company, 60),
-          position: cleanOcrCandidate(position, 80),
+          position: normalizeOcrTitle(position),
           city: cleanOcrCandidate(city, 30),
           applicationDate: parseOcrDate(text),
           stage: parseOcrStage(text),
@@ -1604,16 +1618,24 @@
             if (!ocrRunning) break;
             status.textContent = `正在识别第 ${index + 1}/${ocrFiles.length} 张：${ocrFiles[index].name || '岗位截图'}…`;
             const preparedImage = await prepareOcrImage(ocrFiles[index]);
-            const result = await ocrWorker.recognize(preparedImage);
-            const rawText = String(result?.data?.text || '').trim();
-            const seed = parseScreenshotText(rawText);
-            if (seed.company || seed.position || rawText) recognized.push({ ...normalizeJob({
+            const enhancedResult = await ocrWorker.recognize(preparedImage);
+            const enhancedText = String(enhancedResult?.data?.text || '').trim();
+            let analysisText = enhancedText;
+            let seed = parseScreenshotText(analysisText);
+            if (!seed.position || !seed.city || (/(?:投递|申请)/.test(enhancedText) && !seed.applicationDate)) {
+              status.textContent = `正在复核第 ${index + 1}/${ocrFiles.length} 张的浅色文字…`;
+              const originalResult = await ocrWorker.recognize(ocrFiles[index]);
+              const originalText = String(originalResult?.data?.text || '').trim();
+              if (originalText && originalText !== enhancedText) analysisText = `${enhancedText}\n${originalText}`;
+              seed = parseScreenshotText(analysisText);
+            }
+            if (seed.company || seed.position || analysisText) recognized.push({ ...normalizeJob({
               company: seed.company,
               position: seed.position,
               city: seed.city,
               applicationDate: seed.applicationDate,
               category: '截图识别'
-            }), rawText: rawText.slice(0, 3000) });
+            }), rawText: analysisText.slice(0, 4000) });
             $('#ocrProgressFill').style.width = `${Math.round(((index + 1) / ocrFiles.length) * 100)}%`;
           }
           await ocrWorker.terminate();
