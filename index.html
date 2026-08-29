@@ -4,6 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#5367e9">
+  <meta name="description" content="本地保存、随时跟进的秋招投递管理器">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="秋招管理">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/app-icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
   <title>秋招投递管理</title>
   <style>
     :root {
@@ -239,6 +247,11 @@
 
     .toast { position: fixed; z-index: 20; left: 50%; bottom: 28px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; background: #202a40; color: #fff; border-radius: 11px; padding: 11px 17px; box-shadow: 0 10px 30px rgba(20, 29, 54, .2); transition: .22s ease; font-size: 14px; }
     .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .install-guide { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    .install-guide li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; padding: 12px 13px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-soft); }
+    .install-step { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 8px; color: #fff; background: var(--primary); font-size: 12px; font-weight: 800; }
+    .install-guide strong { display: block; font-size: 13px; }
+    .install-guide span:last-child { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
 
     @media (max-width: 1100px) {
       .app-layout { grid-template-columns: 210px minmax(0, 1fr); }
@@ -271,12 +284,19 @@
       .search-wrap { grid-column: 1 / -1; }
     }
     @media (max-width: 560px) {
+      body { padding-bottom: env(safe-area-inset-bottom); }
+      .app-sidebar { padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); }
+      .shell { padding: 16px 11px calc(30px + env(safe-area-inset-bottom)); }
+      .topbar { flex-direction: column; gap: 13px; margin-bottom: 18px; }
+      .top-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(42px, 1fr)); width: 100%; gap: 7px; }
+      .top-actions .btn { width: 100%; }
       .brand-mark { width: 43px; height: 43px; }
       h1 { font-size: 21px; }
       .subtitle { display: none; }
       .stats { gap: 10px; }
       .stat-card { padding: 15px; }
       .stat-number { font-size: 27px; }
+      .stats .stat-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
       .filters { grid-template-columns: 1fr; padding: 14px; }
       .search-wrap { grid-column: auto; }
       .panel-head { padding: 17px; }
@@ -293,6 +313,22 @@
       .field.full { grid-column: auto; }
       .form-body { padding: 18px 18px 6px; }
       .modal-head, .modal-actions { padding-left: 18px; padding-right: 18px; }
+      dialog { width: calc(100% - 12px); max-height: calc(100dvh - 12px); border-radius: 16px; }
+      dialog[open] { display: flex; flex-direction: column; }
+      dialog > form, dialog > div { min-height: 0; }
+      dialog .form-body { overflow-y: auto; overscroll-behavior: contain; }
+      .table-scroll { overflow: visible; }
+      table { min-width: 0; }
+      thead { display: none; }
+      tbody { display: grid; gap: 12px; padding: 12px; }
+      tbody tr { display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: 0 5px 16px rgba(33, 45, 75, .05); }
+      tbody td { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 13px; border-top: 1px solid var(--line); font-size: 13px; }
+      tbody td:first-child { display: block; padding: 14px 13px; border-top: 0; background: var(--surface-soft); }
+      tbody td::before { content: attr(data-label); color: var(--muted); font-size: 11px; font-weight: 700; }
+      tbody td:first-child::before { display: none; }
+      .schedule { max-width: none; }
+      .row-actions { flex-wrap: wrap; }
+      .row-actions .btn, .row-actions .text-button { flex: 1; min-height: 38px; }
     }
   </style>
 </head>
@@ -326,6 +362,7 @@
         <button class="btn" id="safetyBtn" type="button" title="数据安全"><span class="icon">◇</span>数据安全</button>
         <button class="btn" id="captureUrlBtn" type="button" title="识别投递网址"><span class="icon">⌁</span>识别投递网址</button>
         <button class="btn" id="captureScreenshotBtn" type="button" title="截图识别"><span class="icon">▣</span>截图识别</button>
+        <button class="btn" id="installAppBtn" type="button" title="安装到手机" hidden><span class="icon">⇧</span>安装到手机</button>
         <button class="btn btn-primary" id="addBtn" type="button" title="新增投递"><span class="icon">＋</span>新增投递</button>
       </div>
     </header>
@@ -489,6 +526,19 @@
     <div class="modal-actions"><button class="btn" id="doneSafetyDialog" type="button">完成</button></div>
   </dialog>
 
+  <dialog id="installDialog">
+    <div class="modal-head"><h2>安装到手机桌面</h2><button class="close-btn" id="closeInstallDialog" type="button" aria-label="关闭">×</button></div>
+    <div class="form-body">
+      <p class="capture-note">请先通过 GitHub Pages 的 HTTPS 地址打开。安装后会像普通 App 一样从桌面启动，投递数据仍只保存在当前手机浏览器中。</p>
+      <ol class="install-guide">
+        <li><span class="install-step">iOS</span><div><strong>iPhone / iPad</strong><span>使用 Safari 打开网页 → 点击底部“分享” → 选择“添加到主屏幕” → 点击“添加”。</span></div></li>
+        <li><span class="install-step">安卓</span><div><strong>Android</strong><span>使用 Chrome 打开网页 → 点击右上角菜单 → 选择“安装应用”或“添加到主屏幕”。</span></div></li>
+        <li><span class="install-step">备份</span><div><strong>换手机前先导出</strong><span>不同手机不会自动同步数据。请先点击“导出数据”，再在新手机的“数据安全”中导入。</span></div></li>
+      </ol>
+    </div>
+    <div class="modal-actions"><button class="btn btn-primary" id="doneInstallDialog" type="button">知道了</button></div>
+  </dialog>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="./ocr/tesseract.min.js"></script>
@@ -504,7 +554,7 @@
       const JOB_POOL_META_KEY = 'autumnRecruitmentTracker.jobPoolMeta.v1';
       const QQ_JOB_DOC_URL = 'https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&viewId=vKWCWH';
       const SCHEMA_VERSION = 1;
-      const APP_VERSION = '2.7.1';
+      const APP_VERSION = '3.0.0';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
@@ -1107,13 +1157,13 @@
             ? `<a class="company-link" href="${escapeHtml(record.applicationUrl)}" target="_blank" rel="noopener noreferrer" title="打开投递网页">${escapeHtml(record.company)} ↗</a>`
             : escapeHtml(record.company);
           return `<tr>
-            <td><div class="company">${companyHtml}</div><div class="position">${escapeHtml(record.position)}</div></td>
-            <td>${escapeHtml(record.city)}</td>
-            <td>${escapeHtml(formatDate(record.applicationDate))}</td>
-            <td><span class="badge" data-stage="${escapeHtml(record.stage)}">${escapeHtml(record.stage)}</span></td>
-            <td class="schedule"><div class="schedule-time ${overdue ? 'overdue' : ''}">${escapeHtml(formatDateTime(record.scheduleAt))}${overdue ? ' · 已到期' : ''}</div><div class="schedule-text">${escapeHtml(record.recentSchedule || '—')}</div></td>
-            <td><div class="next-action">${escapeHtml(record.nextAction || '—')}</div></td>
-            <td><div class="row-actions">
+            <td data-label="公司 / 岗位"><div class="company">${companyHtml}</div><div class="position">${escapeHtml(record.position)}</div></td>
+            <td data-label="城市">${escapeHtml(record.city)}</td>
+            <td data-label="投递日期">${escapeHtml(formatDate(record.applicationDate))}</td>
+            <td data-label="当前阶段"><span class="badge" data-stage="${escapeHtml(record.stage)}">${escapeHtml(record.stage)}</span></td>
+            <td class="schedule" data-label="最近安排"><div class="schedule-time ${overdue ? 'overdue' : ''}">${escapeHtml(formatDateTime(record.scheduleAt))}${overdue ? ' · 已到期' : ''}</div><div class="schedule-text">${escapeHtml(record.recentSchedule || '—')}</div></td>
+            <td data-label="下一步行动"><div class="next-action">${escapeHtml(record.nextAction || '—')}</div></td>
+            <td data-label="操作"><div class="row-actions">
               ${canAdvance ? `<button class="btn btn-soft btn-small" data-action="advance" data-id="${escapeHtml(record.id)}" type="button">推进</button>` : ''}
               <button class="text-button" data-action="edit" data-id="${escapeHtml(record.id)}" type="button">编辑</button>
               <button class="text-button danger" data-action="delete" data-id="${escapeHtml(record.id)}" type="button">删除</button>
@@ -1153,7 +1203,7 @@
         editingId = record?.id || null;
         els.dialogTitle.textContent = record ? '编辑投递' : seed ? '确认识别结果' : '新增投递';
         els.form.reset();
-        $('#applicationDate').value = source?.applicationDate || localDateInput(new Date());
+        $('#applicationDate').value = source ? (source.applicationDate || '') : localDateInput(new Date());
         $('#stage').value = source?.stage || '待投递';
         for (const field of ['company', 'position', 'city', 'applicationUrl', 'scheduleAt', 'recentSchedule', 'nextAction']) {
           if (source) document.getElementById(field).value = source[field] || '';
@@ -1315,7 +1365,7 @@
             company: captured.company,
             position: captured.position,
             city: captured.city,
-            applicationDate: captured.applicationDate || localDateInput(new Date()),
+            applicationDate: captured.applicationDate || '',
             stage: STAGES.includes(captured.stage) ? captured.stage : '已投递',
             applicationUrl: captured.applicationUrl,
             nextAction: '关注消息并及时跟进投递进度'
@@ -1721,6 +1771,46 @@
         toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2400);
       }
 
+      let deferredInstallPrompt = null;
+
+      function isStandaloneApp() {
+        return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      }
+
+      function openInstallDialog() {
+        $('#installDialog').showModal();
+      }
+
+      async function requestAppInstall() {
+        if (!deferredInstallPrompt) return openInstallDialog();
+        deferredInstallPrompt.prompt();
+        const result = await deferredInstallPrompt.userChoice.catch(() => null);
+        deferredInstallPrompt = null;
+        if (result?.outcome === 'accepted') {
+          $('#installAppBtn').hidden = true;
+          showToast('已开始安装，稍后可从手机桌面打开');
+        }
+      }
+
+      function initializeMobileApp() {
+        const installButton = $('#installAppBtn');
+        const canInstallFromWeb = location.protocol === 'https:' && !isStandaloneApp();
+        installButton.hidden = !canInstallFromWeb;
+        window.addEventListener('beforeinstallprompt', event => {
+          event.preventDefault();
+          deferredInstallPrompt = event;
+          installButton.hidden = false;
+        });
+        window.addEventListener('appinstalled', () => {
+          deferredInstallPrompt = null;
+          installButton.hidden = true;
+          showToast('秋招投递管理器已安装到桌面');
+        });
+        if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+          window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}), { once: true });
+        }
+      }
+
       function consumeQuickCapture() {
         const encoded = new URLSearchParams(location.search).get('capture');
         if (!encoded) return;
@@ -1733,7 +1823,7 @@
             company: captured.company,
             position: captured.position,
             city: captured.city,
-            applicationDate: captured.applicationDate || localDateInput(new Date()),
+            applicationDate: captured.applicationDate || '',
             stage: STAGES.includes(captured.stage) ? captured.stage : '已投递',
             applicationUrl: captured.applicationUrl,
             nextAction: '关注消息并及时跟进投递进度'
@@ -1751,6 +1841,7 @@
       $('#addBtn').addEventListener('click', () => openDialog());
       $('#captureUrlBtn').addEventListener('click', openCaptureDialog);
       $('#captureScreenshotBtn').addEventListener('click', openScreenshotDialog);
+      $('#installAppBtn').addEventListener('click', requestAppInstall);
       $('#sideScreenshotBtn').addEventListener('click', openScreenshotDialog);
       $('#syncJobsBtn').addEventListener('click', openJobSyncDialog);
       $('#jobSearchInput').addEventListener('input', renderJobPool);
@@ -1829,7 +1920,11 @@
       $('#importBtn').addEventListener('click', () => $('#importFileInput').click());
       $('#importFileInput').addEventListener('change', importBackupFile);
       $('#restoreSnapshotBtn').addEventListener('click', restorePreviousSnapshot);
+      $('#closeInstallDialog').addEventListener('click', () => $('#installDialog').close());
+      $('#doneInstallDialog').addEventListener('click', () => $('#installDialog').close());
+      $('#installDialog').addEventListener('click', event => { if (event.target === $('#installDialog')) $('#installDialog').close(); });
       initializeDataSafety();
+      initializeMobileApp();
       consumeQuickCapture();
     })();
   </script>
