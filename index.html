@@ -256,12 +256,74 @@
     .install-guide strong { display: block; font-size: 13px; }
     .install-guide span:last-child { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
 
+    [hidden] { display: none !important; }
+    .workspace-tabs { display: inline-flex; gap: 4px; padding: 4px; margin-top: 15px; border: 1px solid var(--line); border-radius: 12px; background: #eef2f8; }
+    .workspace-tab { min-height: 36px; padding: 0 16px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font-size: 13px; font-weight: 720; }
+    .workspace-tab.is-active { background: #fff; color: var(--primary-dark); box-shadow: 0 2px 8px rgba(33, 45, 75, .09); }
+    .tool-menu { position: relative; }
+    .tool-menu > summary { display: flex; align-items: center; min-height: 42px; padding: 0 15px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); font-weight: 650; cursor: pointer; list-style: none; }
+    .tool-menu > summary::-webkit-details-marker { display: none; }
+    .tool-menu[open] > summary { border-color: #ccd3e2; box-shadow: 0 5px 14px rgba(33, 45, 75, .08); }
+    .tool-menu-popover { position: absolute; z-index: 18; top: calc(100% + 8px); right: 0; display: grid; min-width: 210px; padding: 7px; border: 1px solid var(--line); border-radius: 13px; background: #fff; box-shadow: 0 15px 40px rgba(20, 29, 54, .16); }
+    .tool-menu-popover button { justify-content: flex-start; width: 100%; border: 0; box-shadow: none; }
+    .tool-menu-popover button:hover { transform: none; background: var(--surface-soft); box-shadow: none; }
+    .sync-button { position: relative; }
+    .sync-dot { display: inline-block; flex: 0 0 auto; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: var(--green); }
+    .sync-mobile-icon { display: none; }
+    .sync-button.is-dirty .sync-dot { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-soft); }
+    .sync-button.is-unconfigured .sync-dot { background: #9aa3b5; }
+    .stats { gap: 11px; }
+    .stat-card { padding: 15px 17px; border-radius: 15px; box-shadow: 0 5px 18px rgba(33, 45, 75, .055); }
+    .stat-number { margin-top: 5px; font-size: 27px; }
+    .stat-icon { width: 31px; height: 31px; border-radius: 9px; }
+    .distribution { padding: 17px 19px 19px; }
+    .dashboard { grid-template-columns: minmax(0, 1fr) 300px; }
+    .records-toolbar { display: grid; gap: 12px; padding: 15px 20px; border-bottom: 1px solid var(--line); }
+    .filters { padding: 0; border: 0; }
+    .type-filter-row { display: flex; align-items: center; gap: 7px; overflow-x: auto; }
+    .type-filter-label { margin-right: 2px; color: var(--muted); font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .type-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 11px; border: 1px solid var(--line); border-radius: 999px; background: #fff; color: var(--muted); font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .type-chip strong { min-width: 18px; padding: 1px 5px; border-radius: 999px; background: #eef1f6; color: #647087; font-size: 10px; }
+    .type-chip.is-active { border-color: #cbd3ff; background: var(--primary-soft); color: var(--primary-dark); }
+    .type-chip.is-active strong { background: #fff; color: var(--primary-dark); }
+    .batch-bar { display: flex; align-items: center; gap: 8px; padding: 10px 13px; border: 1px solid #cfd7ff; border-radius: 11px; background: #f4f6ff; color: var(--primary-dark); font-size: 13px; }
+    .batch-bar .batch-spacer { flex: 1; }
+    .batch-count { font-weight: 750; }
+    .select-cell { width: 42px; text-align: center; }
+    .row-check, #selectAllRecords { width: 17px; height: 17px; accent-color: var(--primary); }
+    .inline-select { width: auto; min-width: 92px; min-height: 32px; padding: 4px 28px 4px 9px; border: 1px solid transparent; border-radius: 8px; background-color: transparent; color: inherit; font-size: 12px; font-weight: 700; }
+    .inline-select:hover, .inline-select:focus { border-color: var(--line); background-color: #fff; }
+    .company-cell { display: flex; align-items: flex-start; gap: 7px; }
+    .company-open { padding: 0; border: 0; background: transparent; color: inherit; text-align: left; }
+    .company-open:hover .company { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+    .external-link { display: inline-flex; padding: 1px 4px; color: var(--muted); text-decoration: none; border-radius: 5px; }
+    .external-link:hover { color: var(--primary); background: var(--primary-soft); }
+    .row-menu { position: relative; }
+    .row-menu > summary { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; color: var(--muted); cursor: pointer; list-style: none; font-size: 18px; }
+    .row-menu > summary::-webkit-details-marker { display: none; }
+    .row-menu > summary:hover { color: var(--primary); background: var(--primary-soft); }
+    .row-menu-popover { position: absolute; z-index: 12; top: 35px; right: 0; display: grid; min-width: 92px; padding: 5px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 10px 25px rgba(20,29,54,.15); }
+    .row-menu-popover button { min-height: 32px; padding: 0 10px; border: 0; border-radius: 7px; background: transparent; color: var(--ink); text-align: left; font-size: 12px; }
+    .row-menu-popover button:hover { background: var(--surface-soft); }
+    .row-menu-popover button.danger { color: var(--red); }
+    #recordDialog { width: min(600px, calc(100% - 20px)); max-width: none; height: 100dvh; max-height: 100dvh; margin: 0 0 0 auto; border-radius: 20px 0 0 20px; }
+    #recordDialog[open] { display: flex; flex-direction: column; }
+    #recordDialog form { display: flex; min-height: 0; flex: 1; flex-direction: column; }
+    #recordDialog .form-body { flex: 1; overflow-y: auto; }
+    .drawer-kicker { margin-bottom: 3px; color: var(--primary); font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+    .feishu-status { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; padding: 12px 13px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface-soft); }
+    .feishu-status strong { display: block; font-size: 13px; }
+    .feishu-status span { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .feishu-help { margin: 15px 0 0; padding-left: 20px; color: var(--muted); font-size: 12px; }
+    .feishu-help li + li { margin-top: 5px; }
+
     @media (max-width: 1100px) {
       .app-layout { grid-template-columns: 210px minmax(0, 1fr); }
       .dashboard { grid-template-columns: 1fr; }
       .side-panel { position: static; }
       .schedule-list { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 22px; }
       .job-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .dashboard { grid-template-columns: 1fr; }
     }
     @media (max-width: 900px) {
       .app-layout { display: block; }
@@ -285,6 +347,10 @@
       .job-sync-meta { white-space: normal; }
       .filters { grid-template-columns: 1fr 1fr; }
       .search-wrap { grid-column: 1 / -1; }
+      .workspace-tabs { margin-top: 11px; }
+      .sync-button .sync-label { display: none; }
+      .sync-button .sync-mobile-icon { display: inline; font-size: 14px; font-weight: 800; }
+      .sync-button .sync-dot { margin-right: 4px; }
     }
     @media (max-width: 560px) {
       body { padding-bottom: env(safe-area-inset-bottom); }
@@ -324,11 +390,21 @@
       table { min-width: 0; }
       thead { display: none; }
       tbody { display: grid; gap: 12px; padding: 12px; }
-      tbody tr { display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: 0 5px 16px rgba(33, 45, 75, .05); }
+      tbody tr { position: relative; display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: 0 5px 16px rgba(33, 45, 75, .05); }
       tbody td { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 13px; border-top: 1px solid var(--line); font-size: 13px; }
-      tbody td:first-child { display: block; padding: 14px 13px; border-top: 0; background: var(--surface-soft); }
+      tbody td:nth-child(2) { display: block; padding: 14px 13px 14px 42px; border-top: 0; background: var(--surface-soft); }
       tbody td::before { content: attr(data-label); color: var(--muted); font-size: 11px; font-weight: 700; }
-      tbody td:first-child::before { display: none; }
+      tbody td:nth-child(2)::before { display: none; }
+      tbody td.select-cell { display: block; position: absolute; z-index: 2; width: auto; padding: 15px 12px; border: 0; }
+      tbody td.select-cell::before { display: none; }
+      .inline-select { min-width: 120px; border-color: var(--line); background: #fff; }
+      .records-toolbar { padding: 13px; }
+      .batch-bar { flex-wrap: wrap; }
+      .batch-bar .batch-spacer { display: none; }
+      #recordDialog { width: 100%; height: 100dvh; max-height: 100dvh; border-radius: 0; }
+      .tool-menu { min-width: 0; }
+      .tool-menu > summary { justify-content: center; padding: 0 9px; }
+      .tool-menu-popover .btn { width: 100%; font-size: 13px; }
       .schedule { max-width: none; }
       .row-actions { flex-wrap: wrap; }
       .row-actions .btn, .row-actions .text-button { flex: 1; min-height: 38px; }
@@ -343,14 +419,12 @@
         <div><div class="sidebar-title">秋招投递管理</div><div class="sidebar-subtitle">让每次投递都有迹可循</div></div>
       </div>
       <nav class="sidebar-nav">
-        <a class="nav-item is-active" href="#overview"><span class="nav-icon">⌂</span><span>总览</span></a>
-        <a class="nav-item" href="#jobPool"><span class="nav-icon">⌕</span><span>岗位库</span></a>
-        <a class="nav-item" href="#records"><span class="nav-icon">▤</span><span>投递记录</span></a>
-        <a class="nav-item" href="#upcoming"><span class="nav-icon">□</span><span>未来安排</span></a>
+        <button class="nav-item is-active" data-workspace-view="applications" type="button"><span class="nav-icon">▤</span><span>我的投递</span></button>
+        <button class="nav-item" data-workspace-view="jobs" type="button"><span class="nav-icon">⌕</span><span>岗位库</span></button>
         <button class="nav-item" id="sideScreenshotBtn" type="button"><span class="nav-icon">▣</span><span>截图识别</span></button>
         <button class="nav-item" id="sideSafetyBtn" type="button"><span class="nav-icon">◇</span><span>数据安全</span></button>
       </nav>
-      <div class="sidebar-footer"><strong>数据保存在本机</strong>无需账号，不上传投递记录</div>
+      <div class="sidebar-footer"><strong>默认保存在本机</strong>仅在你手动操作时同步到飞书</div>
     </aside>
 
     <main class="shell">
@@ -359,18 +433,29 @@
         <div class="page-kicker">DASHBOARD</div>
         <h1>投递总览</h1>
         <p class="subtitle">今天也别忘了跟进重要机会</p>
+        <div class="workspace-tabs" role="tablist" aria-label="工作区">
+          <button class="workspace-tab is-active" data-workspace-view="applications" type="button" role="tab" aria-selected="true">我的投递</button>
+          <button class="workspace-tab" data-workspace-view="jobs" type="button" role="tab" aria-selected="false">岗位库</button>
+        </div>
       </div>
       <div class="top-actions">
-        <button class="btn" id="exportBtn" type="button" title="导出数据"><span class="icon">⇩</span>导出数据</button>
-        <button class="btn" id="safetyBtn" type="button" title="数据安全"><span class="icon">◇</span>数据安全</button>
-        <button class="btn" id="captureUrlBtn" type="button" title="识别投递网址"><span class="icon">⌁</span>识别投递网址</button>
-        <button class="btn" id="captureScreenshotBtn" type="button" title="截图识别"><span class="icon">▣</span>截图识别</button>
+        <button class="btn sync-button is-unconfigured" id="syncFeishuBtn" type="button" title="同步到飞书"><span class="sync-dot"></span><span class="sync-mobile-icon">飞</span><span class="sync-label">配置飞书同步</span></button>
+        <details class="tool-menu" id="toolMenu">
+          <summary>工具⌄</summary>
+          <div class="tool-menu-popover">
+            <button class="btn" id="captureUrlBtn" type="button"><span class="icon">⌁</span>识别投递网址</button>
+            <button class="btn" id="captureScreenshotBtn" type="button"><span class="icon">▣</span>截图识别</button>
+            <button class="btn" id="safetyBtn" type="button"><span class="icon">◇</span>数据安全</button>
+            <button class="btn" id="exportBtn" type="button"><span class="icon">⇩</span>导出 JSON</button>
+            <button class="btn" id="feishuSettingsBtn" type="button"><span class="icon">↗</span>飞书同步设置</button>
+          </div>
+        </details>
         <button class="btn" id="installAppBtn" type="button" title="安装到手机" hidden><span class="icon">⇧</span>安装到手机</button>
         <button class="btn btn-primary" id="addBtn" type="button" title="新增投递"><span class="icon">＋</span>新增投递</button>
       </div>
     </header>
 
-    <section class="stats" id="overview" aria-label="投递概览">
+    <section class="stats application-view" id="overview" aria-label="投递概览">
       <article class="stat-card"><div class="stat-top"><span>投递总数</span><span class="stat-icon">▤</span></div><div class="stat-number" id="totalCount">0</div></article>
       <article class="stat-card"><div class="stat-top"><span>今日投递</span><span class="stat-icon">＋</span></div><div class="stat-number" id="todayCount">0</div></article>
       <article class="stat-card"><div class="stat-top"><span>进行中的流程</span><span class="stat-icon">↻</span></div><div class="stat-number" id="activeCount">0</div></article>
@@ -378,14 +463,14 @@
       <article class="stat-card"><div class="stat-top"><span>Offer 数量</span><span class="stat-icon">✓</span></div><div class="stat-number" id="offerCount">0</div></article>
     </section>
 
-    <section class="panel distribution" aria-labelledby="distributionTitle">
+    <section class="panel distribution application-view" aria-labelledby="distributionTitle">
       <div class="panel-head">
         <div><h2 class="panel-title" id="distributionTitle">阶段分布</h2><div class="panel-caption">快速看看投递主要停留在哪一步</div></div>
       </div>
       <div class="stage-grid" id="stageGrid"></div>
     </section>
 
-    <section class="panel job-pool" id="jobPool" aria-labelledby="jobPoolTitle">
+    <section class="panel job-pool job-view" id="jobPool" aria-labelledby="jobPoolTitle" hidden>
       <div class="panel-head job-pool-head">
         <div>
           <h2 class="panel-title" id="jobPoolTitle">岗位库</h2>
@@ -404,26 +489,36 @@
       <div class="job-list" id="jobList"></div>
     </section>
 
-    <div class="dashboard">
+    <div class="dashboard application-view">
       <section class="main-column">
         <div class="panel" id="records">
           <div class="panel-head">
             <div><h2 class="panel-title">投递记录</h2><div class="panel-caption" id="resultCaption">共 0 条记录</div></div>
           </div>
-          <div class="filters">
-            <div class="search-wrap"><span class="search-glyph">⌕</span><input class="control" id="searchInput" type="search" placeholder="搜索公司、岗位或类型" aria-label="搜索公司、岗位或公司类型"></div>
-            <select class="control" id="companyTypeFilter" aria-label="按公司类型筛选"><option value="all">全部类型</option><option value="互联网">互联网</option><option value="央国企">央国企</option><option value="unclassified">待分类</option></select>
-            <select class="control" id="stageFilter" aria-label="按阶段筛选"><option value="all">全部阶段</option></select>
-            <select class="control" id="sortSelect" aria-label="排序方式">
-              <option value="schedule">最近安排优先</option>
-              <option value="applied-desc">投递日期：从新到旧</option>
-              <option value="updated-desc">最近更新优先</option>
-              <option value="company">公司名称排序</option>
-            </select>
+          <div class="records-toolbar">
+            <div class="type-filter-row" id="companyTypeChips" aria-label="按公司类型筛选"></div>
+            <div class="filters">
+              <div class="search-wrap"><span class="search-glyph">⌕</span><input class="control" id="searchInput" type="search" placeholder="搜索公司、岗位或备注" aria-label="搜索公司、岗位或备注"></div>
+              <select class="control" id="companyTypeFilter" aria-label="按公司类型筛选" hidden><option value="all">全部类型</option><option value="互联网">互联网</option><option value="央国企">央国企</option><option value="unclassified">待分类</option></select>
+              <select class="control" id="stageFilter" aria-label="按阶段筛选"><option value="all">全部阶段</option></select>
+              <select class="control" id="sortSelect" aria-label="排序方式">
+                <option value="schedule">最近安排优先</option>
+                <option value="applied-desc">投递日期：从新到旧</option>
+                <option value="updated-desc">最近更新优先</option>
+                <option value="company">公司名称排序</option>
+              </select>
+            </div>
+            <div class="batch-bar" id="batchBar" hidden>
+              <span class="batch-count" id="batchCount">已选择 0 条</span><span class="batch-spacer"></span>
+              <span>设置类型：</span>
+              <button class="btn btn-small" data-batch-company-type="互联网" type="button">互联网</button>
+              <button class="btn btn-small" data-batch-company-type="央国企" type="button">央国企</button>
+              <button class="text-button" id="clearSelectionBtn" type="button">取消选择</button>
+            </div>
           </div>
           <div class="table-scroll">
             <table>
-              <thead><tr><th>公司 / 岗位</th><th>公司类型</th><th>城市</th><th>投递日期</th><th>当前阶段</th><th>最近安排</th><th>下一步行动</th><th>操作</th></tr></thead>
+              <thead><tr><th class="select-cell"><input id="selectAllRecords" type="checkbox" aria-label="选择当前全部记录"></th><th>公司 / 岗位</th><th>公司类型</th><th>城市</th><th>投递日期</th><th>当前阶段</th><th>安排事项</th><th>备注</th><th>操作</th></tr></thead>
               <tbody id="recordBody"></tbody>
             </table>
           </div>
@@ -441,7 +536,7 @@
 
   <dialog id="recordDialog">
     <form id="recordForm">
-      <div class="modal-head"><h2 id="dialogTitle">新增投递</h2><button class="close-btn" id="closeDialog" type="button" aria-label="关闭">×</button></div>
+      <div class="modal-head"><div><div class="drawer-kicker">APPLICATION</div><h2 id="dialogTitle">新增投递</h2></div><button class="close-btn" id="closeDialog" type="button" aria-label="关闭">×</button></div>
       <div class="form-body">
         <div class="form-grid">
           <div class="field"><label for="company">公司 <span class="required">*</span></label><input class="control" id="company" name="company" required maxlength="60" placeholder="例如：星海科技"></div>
@@ -452,8 +547,8 @@
           <div class="field"><label for="stage">当前阶段 <span class="required">*</span></label><select class="control" id="stage" name="stage" required></select></div>
           <div class="field"><label for="scheduleAt">安排时间</label><input class="control" id="scheduleAt" name="scheduleAt" type="datetime-local"><div class="hint">有面试、笔试或跟进时间时填写</div></div>
           <div class="field full"><label for="applicationUrl">投递网址</label><input class="control" id="applicationUrl" name="applicationUrl" type="url" maxlength="1000" placeholder="https://jobs.example.com/position/123"><div class="hint">通过一键收录插件添加时会自动填写</div></div>
-          <div class="field full"><label for="recentSchedule">最近安排</label><input class="control" id="recentSchedule" name="recentSchedule" maxlength="100" placeholder="例如：线上一面（腾讯会议）"></div>
-          <div class="field full"><label for="nextAction">下一步行动</label><textarea class="control" id="nextAction" name="nextAction" maxlength="200" placeholder="例如：准备项目复盘，提前测试摄像头"></textarea></div>
+          <div class="field full"><label for="recentSchedule">安排事项</label><input class="control" id="recentSchedule" name="recentSchedule" maxlength="100" placeholder="例如：线上一面（腾讯会议）"></div>
+          <div class="field full"><label for="nextAction">备注</label><textarea class="control" id="nextAction" name="nextAction" maxlength="500" placeholder="记录面试反馈、准备重点或其他信息"></textarea></div>
         </div>
       </div>
       <div class="modal-actions"><button class="btn" id="cancelDialog" type="button">取消</button><button class="btn btn-primary" type="submit">保存记录</button></div>
@@ -531,6 +626,27 @@
     <div class="modal-actions"><button class="btn" id="doneSafetyDialog" type="button">完成</button></div>
   </dialog>
 
+  <dialog id="feishuDialog">
+    <form id="feishuForm">
+      <div class="modal-head"><h2>飞书多维表格同步</h2><button class="close-btn" id="closeFeishuDialog" type="button" aria-label="关闭">×</button></div>
+      <div class="form-body">
+        <p class="capture-note">管理器仍是主数据源。同步只会按记录 ID 在飞书中新增或更新，不会删除飞书记录，也不会把飞书修改写回本机。</p>
+        <div class="feishu-status"><div><strong id="feishuStateTitle">尚未连接</strong><span id="feishuStateDetail">配置 Worker 后连接一个空白多维表格</span></div><button class="btn btn-small" id="testFeishuBtn" type="button">测试连接</button></div>
+        <div class="form-grid">
+          <div class="field full"><label for="feishuWorkerUrl">Worker 地址 <span class="required">*</span></label><input class="control" id="feishuWorkerUrl" name="workerUrl" type="url" required placeholder="https://autumn-tracker-sync.your-name.workers.dev"></div>
+          <div class="field full"><label for="feishuSyncToken">同步令牌 <span class="required">*</span></label><input class="control" id="feishuSyncToken" name="syncToken" type="password" required autocomplete="off" placeholder="在 Worker Secret 中设置的 SYNC_TOKEN"><div class="hint">仅保存在当前浏览器，不会随投递记录导出。</div></div>
+          <div class="field full"><label for="feishuBitableUrl">空白多维表格链接 <span class="required">*</span></label><input class="control" id="feishuBitableUrl" name="bitableUrl" type="url" required placeholder="https://example.feishu.cn/base/...?table=..."><div class="hint">请使用包含 /base/ 且带 table 参数的链接，并把该表授权给飞书自建应用。</div></div>
+        </div>
+        <ol class="feishu-help">
+          <li>注册 Cloudflare 并部署仓库中的 Worker。</li>
+          <li>在飞书开放平台创建企业自建应用，授予多维表格读写权限。</li>
+          <li>将应用凭据和同步令牌配置为 Worker Secret，再连接空白表格。</li>
+        </ol>
+      </div>
+      <div class="modal-actions"><button class="btn" id="cancelFeishuDialog" type="button">取消</button><button class="btn btn-primary" id="connectFeishuBtn" type="submit">连接并初始化表格</button></div>
+    </form>
+  </dialog>
+
   <dialog id="installDialog">
     <div class="modal-head"><h2>安装到手机桌面</h2><button class="close-btn" id="closeInstallDialog" type="button" aria-label="关闭">×</button></div>
     <div class="form-body">
@@ -558,9 +674,10 @@
       const STORAGE_KEY = 'autumnRecruitmentTracker.records.v1';
       const JOB_POOL_KEY = 'autumnRecruitmentTracker.jobPool.v1';
       const JOB_POOL_META_KEY = 'autumnRecruitmentTracker.jobPoolMeta.v1';
+      const FEISHU_CONFIG_KEY = 'autumnRecruitmentTracker.feishu.v1';
       const QQ_JOB_DOC_URL = 'https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&viewId=vKWCWH';
       const SCHEMA_VERSION = 2;
-      const APP_VERSION = '3.1.0';
+      const APP_VERSION = '4.0.0';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
@@ -588,6 +705,35 @@
       let ocrCandidates = [];
       let ocrWorker = null;
       let ocrRunning = false;
+      let selectedRecordIds = new Set();
+      let feishuConfig = loadFeishuConfig();
+      let feishuSyncing = false;
+
+      function loadFeishuConfig() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(FEISHU_CONFIG_KEY) || '{}');
+          return {
+            workerUrl: String(parsed.workerUrl || ''), syncToken: String(parsed.syncToken || ''),
+            bitableUrl: String(parsed.bitableUrl || ''), appToken: String(parsed.appToken || ''),
+            tableId: String(parsed.tableId || ''), tableName: String(parsed.tableName || ''),
+            lastSyncedFingerprint: String(parsed.lastSyncedFingerprint || ''), lastSyncedAt: String(parsed.lastSyncedAt || '')
+          };
+        } catch (_) {
+          return { workerUrl: '', syncToken: '', bitableUrl: '', appToken: '', tableId: '', tableName: '', lastSyncedFingerprint: '', lastSyncedAt: '' };
+        }
+      }
+
+      function saveFeishuConfig() {
+        localStorage.setItem(FEISHU_CONFIG_KEY, JSON.stringify(feishuConfig));
+        renderFeishuState();
+      }
+
+      function recordsFingerprint() {
+        const source = JSON.stringify(records.map(record => normalizeRecord(record)).sort((a, b) => a.id.localeCompare(b.id)));
+        let hash = 2166136261;
+        for (let index = 0; index < source.length; index += 1) hash = Math.imul(hash ^ source.charCodeAt(index), 16777619);
+        return (hash >>> 0).toString(16).padStart(8, '0');
+      }
 
       function dateOffset(days, hour = 10, minute = 0) {
         const d = new Date();
@@ -775,6 +921,7 @@
         try {
           localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
           if (message) showToast(message);
+          renderFeishuState();
           const envelope = createEnvelope(records);
           persistenceQueue = persistenceQueue
             .then(() => persistSafetyLayers(envelope))
@@ -1060,7 +1207,7 @@
         const companyType = els.companyTypeFilter.value;
         const stage = els.filter.value;
         const filtered = records.filter(record => {
-          const matchesText = !keyword || `${record.company} ${record.position} ${record.companyType}`.toLocaleLowerCase('zh-CN').includes(keyword);
+          const matchesText = !keyword || `${record.company} ${record.position} ${record.companyType} ${record.city} ${record.recentSchedule} ${record.nextAction}`.toLocaleLowerCase('zh-CN').includes(keyword);
           const matchesCompanyType = companyType === 'all' || (companyType === 'unclassified' ? !record.companyType : record.companyType === companyType);
           return matchesText && matchesCompanyType && (stage === 'all' || record.stage === stage);
         });
@@ -1083,8 +1230,22 @@
         renderStats();
         renderDistribution();
         renderJobPool();
+        renderCompanyTypeChips();
         renderTable();
         renderUpcoming();
+        renderFeishuState();
+      }
+
+      function renderCompanyTypeChips() {
+        const counts = {
+          all: records.length,
+          '互联网': records.filter(record => record.companyType === '互联网').length,
+          '央国企': records.filter(record => record.companyType === '央国企').length,
+          unclassified: records.filter(record => !record.companyType).length
+        };
+        const labels = { all: '全部', '互联网': '互联网', '央国企': '央国企', unclassified: '待分类' };
+        const active = els.companyTypeFilter.value;
+        $('#companyTypeChips').innerHTML = `<span class="type-filter-label">公司类型</span>${Object.keys(labels).map(value => `<button class="type-chip ${value === active ? 'is-active' : ''}" data-type-filter="${value}" type="button">${labels[value]} <strong>${counts[value]}</strong></button>`).join('')}`;
       }
 
       function renderJobPool() {
@@ -1157,31 +1318,37 @@
 
       function renderTable() {
         const visible = getVisibleRecords();
+        selectedRecordIds = new Set([...selectedRecordIds].filter(id => records.some(record => record.id === id)));
         els.caption.textContent = visible.length === records.length ? `共 ${records.length} 条记录` : `显示 ${visible.length} 条，共 ${records.length} 条`;
         els.body.innerHTML = visible.map(record => {
           const scheduleDate = parseLocal(record.scheduleAt);
           const overdue = scheduleDate && scheduleDate < new Date() && !['Offer', '已结束'].includes(record.stage);
-          const canAdvance = record.stage !== '已结束';
-          const companyHtml = record.applicationUrl
-            ? `<a class="company-link" href="${escapeHtml(record.applicationUrl)}" target="_blank" rel="noopener noreferrer" title="打开投递网页">${escapeHtml(record.company)} ↗</a>`
-            : escapeHtml(record.company);
+          const companyTypeOptions = [`<option value="" ${record.companyType ? '' : 'selected'} disabled>待分类</option>`, ...COMPANY_TYPES.map(type => `<option value="${type}" ${record.companyType === type ? 'selected' : ''}>${type}</option>`)].join('');
+          const stageOptions = STAGES.map(stage => `<option value="${stage}" ${record.stage === stage ? 'selected' : ''}>${stage}</option>`).join('');
           return `<tr>
-            <td data-label="公司 / 岗位"><div class="company">${companyHtml}</div><div class="position">${escapeHtml(record.position)}</div></td>
-            <td data-label="公司类型"><span class="company-type" data-company-type="${escapeHtml(record.companyType)}">${escapeHtml(record.companyType || '待分类')}</span></td>
+            <td class="select-cell"><input class="row-check" data-record-id="${escapeHtml(record.id)}" type="checkbox" aria-label="选择 ${escapeHtml(record.company)}" ${selectedRecordIds.has(record.id) ? 'checked' : ''}></td>
+            <td data-label="公司 / 岗位"><div class="company-cell"><button class="company-open" data-action="edit" data-id="${escapeHtml(record.id)}" type="button"><div class="company">${escapeHtml(record.company)}</div><div class="position">${escapeHtml(record.position)}</div></button>${record.applicationUrl ? `<a class="external-link" href="${escapeHtml(record.applicationUrl)}" target="_blank" rel="noopener noreferrer" title="打开投递网页" aria-label="打开 ${escapeHtml(record.company)} 投递网页">↗</a>` : ''}</div></td>
+            <td data-label="公司类型"><select class="inline-select" data-inline-field="companyType" data-id="${escapeHtml(record.id)}" aria-label="修改 ${escapeHtml(record.company)} 的公司类型">${companyTypeOptions}</select></td>
             <td data-label="城市">${escapeHtml(record.city)}</td>
             <td data-label="投递日期">${escapeHtml(formatDate(record.applicationDate))}</td>
-            <td data-label="当前阶段"><span class="badge" data-stage="${escapeHtml(record.stage)}">${escapeHtml(record.stage)}</span></td>
-            <td class="schedule" data-label="最近安排"><div class="schedule-time ${overdue ? 'overdue' : ''}">${escapeHtml(formatDateTime(record.scheduleAt))}${overdue ? ' · 已到期' : ''}</div><div class="schedule-text">${escapeHtml(record.recentSchedule || '—')}</div></td>
-            <td data-label="下一步行动"><div class="next-action">${escapeHtml(record.nextAction || '—')}</div></td>
-            <td data-label="操作"><div class="row-actions">
-              ${canAdvance ? `<button class="btn btn-soft btn-small" data-action="advance" data-id="${escapeHtml(record.id)}" type="button">推进</button>` : ''}
-              <button class="text-button" data-action="edit" data-id="${escapeHtml(record.id)}" type="button">编辑</button>
-              <button class="text-button danger" data-action="delete" data-id="${escapeHtml(record.id)}" type="button">删除</button>
-            </div></td>
+            <td data-label="当前阶段"><select class="inline-select badge" data-stage="${escapeHtml(record.stage)}" data-inline-field="stage" data-id="${escapeHtml(record.id)}" aria-label="修改 ${escapeHtml(record.company)} 的当前阶段">${stageOptions}</select></td>
+            <td class="schedule" data-label="安排事项"><div class="schedule-time ${overdue ? 'overdue' : ''}">${escapeHtml(formatDateTime(record.scheduleAt))}${overdue ? ' · 已到期' : ''}</div><div class="schedule-text">${escapeHtml(record.recentSchedule || '—')}</div></td>
+            <td data-label="备注"><div class="next-action">${escapeHtml(record.nextAction || '—')}</div></td>
+            <td data-label="操作"><details class="row-menu"><summary aria-label="更多操作">⋯</summary><div class="row-menu-popover"><button data-action="edit" data-id="${escapeHtml(record.id)}" type="button">完整编辑</button><button class="danger" data-action="delete" data-id="${escapeHtml(record.id)}" type="button">删除</button></div></details></td>
           </tr>`;
         }).join('');
         els.empty.hidden = visible.length !== 0;
         $('.table-scroll').hidden = visible.length === 0;
+        const selectAll = $('#selectAllRecords');
+        const visibleIds = visible.map(record => record.id);
+        selectAll.checked = visibleIds.length > 0 && visibleIds.every(id => selectedRecordIds.has(id));
+        selectAll.indeterminate = !selectAll.checked && visibleIds.some(id => selectedRecordIds.has(id));
+        renderBatchBar();
+      }
+
+      function renderBatchBar() {
+        $('#batchBar').hidden = selectedRecordIds.size === 0;
+        $('#batchCount').textContent = `已选择 ${selectedRecordIds.size} 条`;
       }
 
       function renderUpcoming() {
@@ -1206,6 +1373,22 @@
       function populateSelects() {
         els.filter.insertAdjacentHTML('beforeend', STAGES.map(s => `<option value="${s}">${s}</option>`).join(''));
         $('#stage').innerHTML = STAGES.map(s => `<option value="${s}">${s}</option>`).join('');
+      }
+
+      function setWorkspaceView(view) {
+        const isJobs = view === 'jobs';
+        document.querySelectorAll('.application-view').forEach(element => { element.hidden = isJobs; });
+        document.querySelectorAll('.job-view').forEach(element => { element.hidden = !isJobs; });
+        document.querySelectorAll('[data-workspace-view]').forEach(button => {
+          const active = button.dataset.workspaceView === view;
+          button.classList.toggle('is-active', active);
+          if (button.getAttribute('role') === 'tab') button.setAttribute('aria-selected', String(active));
+        });
+        $('.page-kicker').textContent = isJobs ? 'JOB DISCOVERY' : 'DASHBOARD';
+        $('h1').textContent = isJobs ? '岗位库' : '投递总览';
+        $('.subtitle').textContent = isJobs ? '发现机会，确认后加入投递管理' : '今天也别忘了跟进重要机会';
+        if (isJobs) renderJobPool();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
       function openDialog(record = null, seed = null) {
@@ -1759,20 +1942,149 @@
           render();
           return;
         }
-        if (button.dataset.action === 'advance') {
-          const current = STAGES.indexOf(record.stage);
-          const next = STAGES[Math.min(current + 1, STAGES.length - 1)];
-          record.stage = next;
-          record.updatedAt = Date.now();
-          saveRecords(`已推进到「${next}」并自动保存`);
-          render();
-        }
+      }
+
+      function handleInlineChange(event) {
+        const control = event.target.closest('[data-inline-field]');
+        if (!control) return;
+        const record = records.find(item => item.id === control.dataset.id);
+        if (!record) return;
+        const field = control.dataset.inlineField;
+        if (field === 'companyType' && !COMPANY_TYPES.includes(control.value)) return;
+        if (field === 'stage' && !STAGES.includes(control.value)) return;
+        record[field] = control.value;
+        record.updatedAt = Date.now();
+        saveRecords(field === 'stage' ? `已更新阶段为「${control.value}」` : `已归类为「${control.value}」`);
+        render();
+      }
+
+      function handleRecordSelection(event) {
+        const checkbox = event.target.closest('.row-check');
+        if (!checkbox) return;
+        if (checkbox.checked) selectedRecordIds.add(checkbox.dataset.recordId);
+        else selectedRecordIds.delete(checkbox.dataset.recordId);
+        renderBatchBar();
+        const visibleIds = getVisibleRecords().map(record => record.id);
+        $('#selectAllRecords').checked = visibleIds.length > 0 && visibleIds.every(id => selectedRecordIds.has(id));
+        $('#selectAllRecords').indeterminate = !$('#selectAllRecords').checked && visibleIds.some(id => selectedRecordIds.has(id));
+      }
+
+      function applyBatchCompanyType(type) {
+        if (!COMPANY_TYPES.includes(type) || !selectedRecordIds.size) return;
+        const now = Date.now();
+        records = records.map(record => selectedRecordIds.has(record.id) ? { ...record, companyType: type, updatedAt: now } : record);
+        const count = selectedRecordIds.size;
+        selectedRecordIds.clear();
+        saveRecords(`已将 ${count} 条记录归类为「${type}」`);
+        render();
       }
 
       function exportData() {
         const date = localDateInput(new Date());
         downloadPayload(createEnvelope(records), `秋招投递记录-${date}.json`);
         showToast(`已导出 ${records.length} 条记录，原数据未改变`);
+      }
+
+      function renderFeishuState() {
+        const button = $('#syncFeishuBtn');
+        if (!button) return;
+        const configured = Boolean(feishuConfig.workerUrl && feishuConfig.syncToken && feishuConfig.appToken && feishuConfig.tableId);
+        const dirty = configured && feishuConfig.lastSyncedFingerprint !== recordsFingerprint();
+        button.classList.toggle('is-unconfigured', !configured);
+        button.classList.toggle('is-dirty', dirty);
+        button.disabled = feishuSyncing;
+        $('.sync-label').textContent = feishuSyncing ? '正在同步…' : !configured ? '配置飞书同步' : dirty ? '有未同步变更' : '已同步飞书';
+        const title = $('#feishuStateTitle');
+        const detail = $('#feishuStateDetail');
+        if (!title || !detail) return;
+        title.textContent = !configured ? '尚未连接' : dirty ? '有未同步变更' : '飞书已同步';
+        detail.textContent = !configured ? '配置 Worker 后连接一个空白多维表格' : `${feishuConfig.tableName || '已连接表格'}${feishuConfig.lastSyncedAt ? ` · 上次同步 ${formatClock(feishuConfig.lastSyncedAt)}` : ' · 尚未执行同步'}`;
+      }
+
+      function openFeishuDialog() {
+        $('#toolMenu').open = false;
+        $('#feishuWorkerUrl').value = feishuConfig.workerUrl;
+        $('#feishuSyncToken').value = feishuConfig.syncToken;
+        $('#feishuBitableUrl').value = feishuConfig.bitableUrl;
+        renderFeishuState();
+        $('#feishuDialog').showModal();
+      }
+
+      function closeFeishuDialog() {
+        $('#feishuDialog').close();
+      }
+
+      function readFeishuForm() {
+        const workerUrl = $('#feishuWorkerUrl').value.trim().replace(/\/+$/, '');
+        const syncToken = $('#feishuSyncToken').value.trim();
+        const bitableUrl = $('#feishuBitableUrl').value.trim();
+        if (!workerUrl || !syncToken || !bitableUrl) throw new Error('请完整填写 Worker 地址、同步令牌和多维表格链接');
+        const parsedWorker = new URL(workerUrl);
+        if (parsedWorker.protocol !== 'https:' && !['localhost', '127.0.0.1'].includes(parsedWorker.hostname)) throw new Error('Worker 地址必须使用 HTTPS');
+        return { workerUrl, syncToken, bitableUrl };
+      }
+
+      async function requestFeishuApi(path, payload, config = feishuConfig) {
+        const response = await fetch(`${config.workerUrl}${path}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${config.syncToken}` },
+          body: JSON.stringify(payload)
+        });
+        let result = {};
+        try { result = await response.json(); } catch (_) {}
+        if (!response.ok || result.ok === false) throw new Error(result.message || `同步服务返回 HTTP ${response.status}`);
+        return result;
+      }
+
+      async function connectFeishu(event) {
+        event.preventDefault();
+        const button = $('#connectFeishuBtn');
+        try {
+          button.disabled = true;
+          button.textContent = '正在初始化…';
+          const draft = readFeishuForm();
+          const result = await requestFeishuApi('/connect', { bitableUrl: draft.bitableUrl }, draft);
+          feishuConfig = { ...feishuConfig, ...draft, appToken: result.target.appToken, tableId: result.target.tableId, tableName: result.target.tableName || '秋招投递记录', lastSyncedFingerprint: '', lastSyncedAt: '' };
+          saveFeishuConfig();
+          showToast('飞书多维表格已连接并初始化');
+        } catch (error) {
+          alert(`连接飞书失败：${error.message || '请检查 Worker 和应用权限'}`);
+        } finally {
+          button.disabled = false;
+          button.textContent = '连接并初始化表格';
+        }
+      }
+
+      async function testFeishuConnection() {
+        try {
+          const draft = readFeishuForm();
+          const result = await requestFeishuApi('/health', {}, draft);
+          showToast(result.feishuReady ? 'Worker 与飞书凭据均可用' : 'Worker 可用，但尚未配置飞书凭据');
+        } catch (error) {
+          alert(`连接测试失败：${error.message}`);
+        }
+      }
+
+      async function syncToFeishu() {
+        if (!(feishuConfig.workerUrl && feishuConfig.syncToken && feishuConfig.appToken && feishuConfig.tableId)) return openFeishuDialog();
+        if (feishuSyncing) return;
+        try {
+          feishuSyncing = true;
+          renderFeishuState();
+          const result = await requestFeishuApi('/sync', {
+            target: { appToken: feishuConfig.appToken, tableId: feishuConfig.tableId },
+            records: records.map(record => normalizeRecord(record))
+          });
+          feishuConfig.lastSyncedFingerprint = recordsFingerprint();
+          feishuConfig.lastSyncedAt = result.syncedAt || new Date().toISOString();
+          saveFeishuConfig();
+          showToast(`飞书同步完成：新增 ${result.created || 0}，更新 ${result.updated || 0}，跳过 ${result.skipped || 0}`);
+        } catch (error) {
+          alert(`同步飞书失败：${error.message || '本地记录未受影响，请稍后重试'}`);
+        } finally {
+          feishuSyncing = false;
+          renderFeishuState();
+        }
       }
 
       function showToast(message) {
@@ -1870,20 +2182,34 @@
       $('#safetyBtn').addEventListener('click', openSafetyDialog);
       $('#sideSafetyBtn').addEventListener('click', openSafetyDialog);
       $('#exportBtn').addEventListener('click', exportData);
-      document.querySelectorAll('.nav-item[href]').forEach(link => {
-        link.addEventListener('click', () => {
-          document.querySelectorAll('.nav-item[href]').forEach(item => item.classList.remove('is-active'));
-          link.classList.add('is-active');
-        });
-      });
+      $('.tool-menu-popover').addEventListener('click', () => { $('#toolMenu').open = false; });
+      document.querySelectorAll('[data-workspace-view]').forEach(button => button.addEventListener('click', () => setWorkspaceView(button.dataset.workspaceView)));
       $('#closeDialog').addEventListener('click', closeDialog);
       $('#cancelDialog').addEventListener('click', closeDialog);
       els.form.addEventListener('submit', submitForm);
       els.body.addEventListener('click', handleTableAction);
+      els.body.addEventListener('change', handleInlineChange);
+      els.body.addEventListener('change', handleRecordSelection);
       els.search.addEventListener('input', renderTable);
       els.companyTypeFilter.addEventListener('change', renderTable);
       els.filter.addEventListener('change', renderTable);
       els.sort.addEventListener('change', renderTable);
+      $('#companyTypeChips').addEventListener('click', event => {
+        const button = event.target.closest('[data-type-filter]');
+        if (!button) return;
+        els.companyTypeFilter.value = button.dataset.typeFilter;
+        renderCompanyTypeChips();
+        renderTable();
+      });
+      $('#selectAllRecords').addEventListener('change', event => {
+        getVisibleRecords().forEach(record => event.target.checked ? selectedRecordIds.add(record.id) : selectedRecordIds.delete(record.id));
+        renderTable();
+      });
+      $('#batchBar').addEventListener('click', event => {
+        const button = event.target.closest('[data-batch-company-type]');
+        if (button) applyBatchCompanyType(button.dataset.batchCompanyType);
+      });
+      $('#clearSelectionBtn').addEventListener('click', () => { selectedRecordIds.clear(); renderTable(); });
       els.dialog.addEventListener('click', event => { if (event.target === els.dialog) closeDialog(); });
       $('#closeCaptureDialog').addEventListener('click', closeCaptureDialog);
       $('#cancelCaptureDialog').addEventListener('click', closeCaptureDialog);
@@ -1932,6 +2258,13 @@
       $('#importBtn').addEventListener('click', () => $('#importFileInput').click());
       $('#importFileInput').addEventListener('change', importBackupFile);
       $('#restoreSnapshotBtn').addEventListener('click', restorePreviousSnapshot);
+      $('#syncFeishuBtn').addEventListener('click', syncToFeishu);
+      $('#feishuSettingsBtn').addEventListener('click', openFeishuDialog);
+      $('#closeFeishuDialog').addEventListener('click', closeFeishuDialog);
+      $('#cancelFeishuDialog').addEventListener('click', closeFeishuDialog);
+      $('#feishuForm').addEventListener('submit', connectFeishu);
+      $('#testFeishuBtn').addEventListener('click', testFeishuConnection);
+      $('#feishuDialog').addEventListener('click', event => { if (event.target === $('#feishuDialog')) closeFeishuDialog(); });
       $('#closeInstallDialog').addEventListener('click', () => $('#installDialog').close());
       $('#doneInstallDialog').addEventListener('click', () => $('#installDialog').close());
       $('#installDialog').addEventListener('click', event => { if (event.target === $('#installDialog')) $('#installDialog').close(); });
