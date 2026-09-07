@@ -121,14 +121,14 @@
     .bar { height: 8px; background: #edf0f6; border-radius: 999px; overflow: hidden; }
     .bar-fill { height: 100%; min-width: 0; border-radius: inherit; background: var(--stage-color, var(--primary)); transition: width .25s ease; }
 
-    .filters { display: grid; grid-template-columns: minmax(180px, 1fr) 150px 190px; gap: 10px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
+    .filters { display: grid; grid-template-columns: minmax(180px, 1fr) 140px 150px 190px; gap: 10px; padding: 16px 22px; border-bottom: 1px solid var(--line); }
     .control { width: 100%; min-height: 42px; border: 1px solid var(--line); border-radius: 11px; padding: 9px 12px; color: var(--ink); background: #fff; }
     .search-wrap { position: relative; }
     .search-wrap .control { padding-left: 39px; }
     .search-glyph { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #8a94a8; pointer-events: none; }
 
     .table-scroll { overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 980px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1080px; }
     th { padding: 13px 15px; color: var(--muted); font-size: 12px; font-weight: 700; text-align: left; background: #fafbfe; white-space: nowrap; }
     td { padding: 16px 15px; border-top: 1px solid var(--line); vertical-align: middle; font-size: 14px; }
     tbody tr { transition: background .15s ease; }
@@ -142,6 +142,9 @@
     .schedule-text, .next-action { color: var(--muted); font-size: 13px; margin-top: 2px; overflow-wrap: anywhere; }
     .overdue { color: var(--red); }
     .badge { display: inline-flex; align-items: center; min-height: 28px; padding: 3px 10px; border: 1px solid var(--stage-border, transparent); border-radius: 8px; background: var(--stage-soft, var(--primary-soft)); color: var(--stage-color, var(--primary-dark)); font-size: 12px; font-weight: 760; white-space: nowrap; }
+    .company-type { display: inline-flex; align-items: center; min-height: 26px; padding: 2px 9px; border-radius: 999px; background: #edf4ff; color: #356fd6; font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .company-type[data-company-type="央国企"] { background: #fff3e4; color: #a8660d; }
+    .company-type[data-company-type=""] { background: #f0f2f5; color: #657084; }
     .stage-cell[data-stage="待投递"], .badge[data-stage="待投递"] { --stage-color: #657084; --stage-soft: #f0f2f5; --stage-border: #d9dee7; }
     .stage-cell[data-stage="已投递"], .badge[data-stage="已投递"] { --stage-color: #356fd6; --stage-soft: #edf4ff; --stage-border: #cadcff; }
     .stage-cell[data-stage="笔试"], .badge[data-stage="笔试"] { --stage-color: #b87812; --stage-soft: #fff5df; --stage-border: #f1dba9; }
@@ -408,7 +411,8 @@
             <div><h2 class="panel-title">投递记录</h2><div class="panel-caption" id="resultCaption">共 0 条记录</div></div>
           </div>
           <div class="filters">
-            <div class="search-wrap"><span class="search-glyph">⌕</span><input class="control" id="searchInput" type="search" placeholder="搜索公司或岗位" aria-label="搜索公司或岗位"></div>
+            <div class="search-wrap"><span class="search-glyph">⌕</span><input class="control" id="searchInput" type="search" placeholder="搜索公司、岗位或类型" aria-label="搜索公司、岗位或公司类型"></div>
+            <select class="control" id="companyTypeFilter" aria-label="按公司类型筛选"><option value="all">全部类型</option><option value="互联网">互联网</option><option value="央国企">央国企</option><option value="unclassified">待分类</option></select>
             <select class="control" id="stageFilter" aria-label="按阶段筛选"><option value="all">全部阶段</option></select>
             <select class="control" id="sortSelect" aria-label="排序方式">
               <option value="schedule">最近安排优先</option>
@@ -419,7 +423,7 @@
           </div>
           <div class="table-scroll">
             <table>
-              <thead><tr><th>公司 / 岗位</th><th>城市</th><th>投递日期</th><th>当前阶段</th><th>最近安排</th><th>下一步行动</th><th>操作</th></tr></thead>
+              <thead><tr><th>公司 / 岗位</th><th>公司类型</th><th>城市</th><th>投递日期</th><th>当前阶段</th><th>最近安排</th><th>下一步行动</th><th>操作</th></tr></thead>
               <tbody id="recordBody"></tbody>
             </table>
           </div>
@@ -442,6 +446,7 @@
         <div class="form-grid">
           <div class="field"><label for="company">公司 <span class="required">*</span></label><input class="control" id="company" name="company" required maxlength="60" placeholder="例如：星海科技"></div>
           <div class="field"><label for="position">岗位 <span class="required">*</span></label><input class="control" id="position" name="position" required maxlength="80" placeholder="例如：产品经理校招生"></div>
+          <div class="field"><label for="companyType">公司类型 <span class="required">*</span></label><select class="control" id="companyType" name="companyType" required><option value="" disabled>请选择公司类型</option><option value="互联网">互联网</option><option value="央国企">央国企</option></select></div>
           <div class="field"><label for="city">城市 <span class="required">*</span></label><input class="control" id="city" name="city" required maxlength="30" placeholder="例如：上海"></div>
           <div class="field"><label for="applicationDate">投递日期 <span class="required">*</span></label><input class="control" id="applicationDate" name="applicationDate" type="date" required></div>
           <div class="field"><label for="stage">当前阶段 <span class="required">*</span></label><select class="control" id="stage" name="stage" required></select></div>
@@ -548,19 +553,20 @@
       'use strict';
 
       const STAGES = ['待投递', '已投递', '笔试', '一面', '二面', 'HR面', 'Offer', '已结束'];
+      const COMPANY_TYPES = ['互联网', '央国企'];
       // 永久兼容约定：后续版本不得更改或复用此键；字段升级统一通过 normalizeRecord 迁移。
       const STORAGE_KEY = 'autumnRecruitmentTracker.records.v1';
       const JOB_POOL_KEY = 'autumnRecruitmentTracker.jobPool.v1';
       const JOB_POOL_META_KEY = 'autumnRecruitmentTracker.jobPoolMeta.v1';
       const QQ_JOB_DOC_URL = 'https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&viewId=vKWCWH';
-      const SCHEMA_VERSION = 1;
-      const APP_VERSION = '3.0.0';
+      const SCHEMA_VERSION = 2;
+      const APP_VERSION = '3.1.0';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
         total: $('#totalCount'), today: $('#todayCount'), active: $('#activeCount'), week: $('#weekCount'), offer: $('#offerCount'),
         stageGrid: $('#stageGrid'), body: $('#recordBody'), empty: $('#emptyState'), caption: $('#resultCaption'),
-        upcoming: $('#upcomingList'), search: $('#searchInput'), filter: $('#stageFilter'), sort: $('#sortSelect'),
+        upcoming: $('#upcomingList'), search: $('#searchInput'), companyTypeFilter: $('#companyTypeFilter'), filter: $('#stageFilter'), sort: $('#sortSelect'),
         dialog: $('#recordDialog'), form: $('#recordForm'), dialogTitle: $('#dialogTitle'), toast: $('#toast')
       };
       let primaryLoadState = 'unknown';
@@ -604,11 +610,11 @@
       function exampleRecords() {
         const now = Date.now();
         return [
-          { id: cryptoId(), company: '星海科技', position: '产品经理校招生', city: '上海', applicationDate: localDateInput(dateOffset(-12)), stage: '一面', scheduleAt: localDateTimeInput(dateOffset(1, 14, 0)), recentSchedule: '线上一面', nextAction: '梳理项目经历，准备三分钟自我介绍', updatedAt: now - 2000 },
-          { id: cryptoId(), company: '山岚智能', position: '算法工程师', city: '北京', applicationDate: localDateInput(dateOffset(-18)), stage: '笔试', scheduleAt: localDateTimeInput(dateOffset(3, 19, 0)), recentSchedule: '在线笔试', nextAction: '复习动态规划与概率题', updatedAt: now - 5000 },
-          { id: cryptoId(), company: '青禾互娱', position: '用户运营', city: '杭州', applicationDate: localDateInput(dateOffset(-7)), stage: '已投递', scheduleAt: localDateTimeInput(dateOffset(5, 10, 30)), recentSchedule: '邮件跟进招聘进度', nextAction: '检查邮箱并准备补充作品集', updatedAt: now - 8000 },
-          { id: cryptoId(), company: '远帆咨询', position: '商业分析顾问', city: '深圳', applicationDate: localDateInput(dateOffset(-28)), stage: '二面', scheduleAt: localDateTimeInput(dateOffset(8, 15, 0)), recentSchedule: '业务负责人面试', nextAction: '练习市场规模估算案例', updatedAt: now - 12000 },
-          { id: cryptoId(), company: '拾光设计', position: '交互设计师', city: '广州', applicationDate: localDateInput(dateOffset(-33)), stage: 'Offer', scheduleAt: '', recentSchedule: '已收到录用通知', nextAction: '确认入职时间并回复邮件', updatedAt: now - 15000 }
+          { id: cryptoId(), company: '星海科技', position: '产品经理校招生', companyType: '互联网', city: '上海', applicationDate: localDateInput(dateOffset(-12)), stage: '一面', scheduleAt: localDateTimeInput(dateOffset(1, 14, 0)), recentSchedule: '线上一面', nextAction: '梳理项目经历，准备三分钟自我介绍', updatedAt: now - 2000 },
+          { id: cryptoId(), company: '山岚智能', position: '算法工程师', companyType: '互联网', city: '北京', applicationDate: localDateInput(dateOffset(-18)), stage: '笔试', scheduleAt: localDateTimeInput(dateOffset(3, 19, 0)), recentSchedule: '在线笔试', nextAction: '复习动态规划与概率题', updatedAt: now - 5000 },
+          { id: cryptoId(), company: '青禾互娱', position: '用户运营', companyType: '互联网', city: '杭州', applicationDate: localDateInput(dateOffset(-7)), stage: '已投递', scheduleAt: localDateTimeInput(dateOffset(5, 10, 30)), recentSchedule: '邮件跟进招聘进度', nextAction: '检查邮箱并准备补充作品集', updatedAt: now - 8000 },
+          { id: cryptoId(), company: '远帆咨询', position: '商业分析顾问', companyType: '央国企', city: '深圳', applicationDate: localDateInput(dateOffset(-28)), stage: '二面', scheduleAt: localDateTimeInput(dateOffset(8, 15, 0)), recentSchedule: '业务负责人面试', nextAction: '练习市场规模估算案例', updatedAt: now - 12000 },
+          { id: cryptoId(), company: '拾光设计', position: '交互设计师', companyType: '互联网', city: '广州', applicationDate: localDateInput(dateOffset(-33)), stage: 'Offer', scheduleAt: '', recentSchedule: '已收到录用通知', nextAction: '确认入职时间并回复邮件', updatedAt: now - 15000 }
         ];
       }
 
@@ -641,7 +647,8 @@
       function normalizeRecord(item) {
         return {
           id: String(item.id || cryptoId()),
-          company: String(item.company || ''), position: String(item.position || ''), city: String(item.city || ''),
+          company: String(item.company || ''), position: String(item.position || ''),
+          companyType: COMPANY_TYPES.includes(item.companyType) ? item.companyType : '', city: String(item.city || ''),
           applicationDate: String(item.applicationDate || ''), stage: STAGES.includes(item.stage) ? item.stage : '待投递',
           applicationUrl: /^https?:\/\//i.test(String(item.applicationUrl || '')) ? String(item.applicationUrl) : '',
           scheduleAt: String(item.scheduleAt || ''), recentSchedule: String(item.recentSchedule || ''),
@@ -1050,10 +1057,12 @@
 
       function getVisibleRecords() {
         const keyword = els.search.value.trim().toLocaleLowerCase('zh-CN');
+        const companyType = els.companyTypeFilter.value;
         const stage = els.filter.value;
         const filtered = records.filter(record => {
-          const matchesText = !keyword || `${record.company} ${record.position}`.toLocaleLowerCase('zh-CN').includes(keyword);
-          return matchesText && (stage === 'all' || record.stage === stage);
+          const matchesText = !keyword || `${record.company} ${record.position} ${record.companyType}`.toLocaleLowerCase('zh-CN').includes(keyword);
+          const matchesCompanyType = companyType === 'all' || (companyType === 'unclassified' ? !record.companyType : record.companyType === companyType);
+          return matchesText && matchesCompanyType && (stage === 'all' || record.stage === stage);
         });
         const farFuture = Number.MAX_SAFE_INTEGER;
         filtered.sort((a, b) => {
@@ -1158,6 +1167,7 @@
             : escapeHtml(record.company);
           return `<tr>
             <td data-label="公司 / 岗位"><div class="company">${companyHtml}</div><div class="position">${escapeHtml(record.position)}</div></td>
+            <td data-label="公司类型"><span class="company-type" data-company-type="${escapeHtml(record.companyType)}">${escapeHtml(record.companyType || '待分类')}</span></td>
             <td data-label="城市">${escapeHtml(record.city)}</td>
             <td data-label="投递日期">${escapeHtml(formatDate(record.applicationDate))}</td>
             <td data-label="当前阶段"><span class="badge" data-stage="${escapeHtml(record.stage)}">${escapeHtml(record.stage)}</span></td>
@@ -1204,6 +1214,7 @@
         els.dialogTitle.textContent = record ? '编辑投递' : seed ? '确认识别结果' : '新增投递';
         els.form.reset();
         $('#applicationDate').value = source ? (source.applicationDate || '') : localDateInput(new Date());
+        $('#companyType').value = source ? (source.companyType || '') : '互联网';
         $('#stage').value = source?.stage || '待投递';
         for (const field of ['company', 'position', 'city', 'applicationUrl', 'scheduleAt', 'recentSchedule', 'nextAction']) {
           if (source) document.getElementById(field).value = source[field] || '';
@@ -1870,6 +1881,7 @@
       els.form.addEventListener('submit', submitForm);
       els.body.addEventListener('click', handleTableAction);
       els.search.addEventListener('input', renderTable);
+      els.companyTypeFilter.addEventListener('change', renderTable);
       els.filter.addEventListener('change', renderTable);
       els.sort.addEventListener('change', renderTable);
       els.dialog.addEventListener('click', event => { if (event.target === els.dialog) closeDialog(); });
