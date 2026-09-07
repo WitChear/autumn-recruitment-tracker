@@ -133,6 +133,28 @@
     td { padding: 16px 15px; border-top: 1px solid var(--line); vertical-align: middle; font-size: 14px; }
     tbody tr { transition: background .15s ease; }
     tbody tr:hover { background: #fbfcff; }
+    tbody tr.record-row { --row-stage-bg: #fff; }
+    tbody tr.record-row > td { background: var(--row-stage-bg); }
+    tbody tr.record-row[data-stage="待投递"] { --row-stage-bg: #f6f7f9; }
+    tbody tr.record-row[data-stage="已投递"] { --row-stage-bg: #f2f7ff; }
+    tbody tr.record-row[data-stage="笔试"] { --row-stage-bg: #fff9eb; }
+    tbody tr.record-row[data-stage="一面"] { --row-stage-bg: #eefafd; }
+    tbody tr.record-row[data-stage="二面"] { --row-stage-bg: #f5f2ff; }
+    tbody tr.record-row[data-stage="HR面"] { --row-stage-bg: #fff3f9; }
+    tbody tr.record-row[data-stage="Offer"] { --row-stage-bg: #edf9f3; }
+    tbody tr.record-row[data-stage="已结束"] { --row-stage-bg: #f7f1f1; }
+    .lifecycle-heading-row td, .company-heading-row td { border-top: 0; }
+    .lifecycle-heading-row td { padding: 18px 15px 10px; background: #fff !important; }
+    .lifecycle-heading { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 800; }
+    .lifecycle-heading::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--group-color); box-shadow: 0 0 0 4px var(--group-soft); }
+    .lifecycle-heading-row[data-lifecycle="active"] { --group-color: #5367e9; --group-soft: #edf0ff; }
+    .lifecycle-heading-row[data-lifecycle="oc"] { --group-color: #17825b; --group-soft: #e4f6ee; }
+    .lifecycle-heading-row[data-lifecycle="ended"] { --group-color: #a34c4c; --group-soft: #f8eaea; }
+    .group-count { color: var(--muted); font-size: 12px; font-weight: 650; }
+    .company-heading-row td { padding: 9px 15px; background: #f7f8fb !important; color: #4d5870; font-size: 12px; font-weight: 780; letter-spacing: .02em; }
+    .company-heading-row[data-company-group="互联网"] td { border-left: 4px solid #4c78dd; }
+    .company-heading-row[data-company-group="央国企"] td { border-left: 4px solid #d18a28; }
+    .company-heading-row[data-company-group="待分类"] td { border-left: 4px solid #9199a8; }
     .company { font-weight: 720; }
     .company-link { color: inherit; text-decoration: none; }
     .company-link:hover { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
@@ -390,13 +412,18 @@
       table { min-width: 0; }
       thead { display: none; }
       tbody { display: grid; gap: 12px; padding: 12px; }
-      tbody tr { position: relative; display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: #fff; box-shadow: 0 5px 16px rgba(33, 45, 75, .05); }
+      tbody tr.record-row { position: relative; display: block; overflow: hidden; border: 1px solid var(--stage-border, var(--line)); border-radius: 14px; background: var(--row-stage-bg); box-shadow: 0 5px 16px rgba(33, 45, 75, .05); }
       tbody td { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 13px; border-top: 1px solid var(--line); font-size: 13px; }
-      tbody td:nth-child(2) { display: block; padding: 14px 13px 14px 42px; border-top: 0; background: var(--surface-soft); }
+      tbody tr.record-row td:nth-child(2) { display: block; padding: 14px 13px 14px 42px; border-top: 0; background: var(--row-stage-bg); }
       tbody td::before { content: attr(data-label); color: var(--muted); font-size: 11px; font-weight: 700; }
-      tbody td:nth-child(2)::before { display: none; }
+      tbody tr.record-row td:nth-child(2)::before { display: none; }
       tbody td.select-cell { display: block; position: absolute; z-index: 2; width: auto; padding: 15px 12px; border: 0; }
       tbody td.select-cell::before { display: none; }
+      tbody tr.lifecycle-heading-row, tbody tr.company-heading-row { display: block; box-shadow: none; }
+      tbody tr.lifecycle-heading-row td, tbody tr.company-heading-row td { display: block; border: 0; }
+      tbody tr.lifecycle-heading-row td { padding: 14px 3px 4px; }
+      tbody tr.company-heading-row td { margin-top: 3px; padding: 8px 11px; border-radius: 9px; }
+      tbody tr.lifecycle-heading-row td::before, tbody tr.company-heading-row td::before { display: none; }
       .inline-select { min-width: 120px; border-color: var(--line); background: #fff; }
       .records-toolbar { padding: 13px; }
       .batch-bar { flex-wrap: wrap; }
@@ -460,7 +487,7 @@
       <article class="stat-card"><div class="stat-top"><span>今日投递</span><span class="stat-icon">＋</span></div><div class="stat-number" id="todayCount">0</div></article>
       <article class="stat-card"><div class="stat-top"><span>进行中的流程</span><span class="stat-icon">↻</span></div><div class="stat-number" id="activeCount">0</div></article>
       <article class="stat-card"><div class="stat-top"><span>七天内安排</span><span class="stat-icon">□</span></div><div class="stat-number" id="weekCount">0</div></article>
-      <article class="stat-card"><div class="stat-top"><span>Offer 数量</span><span class="stat-icon">✓</span></div><div class="stat-number" id="offerCount">0</div></article>
+      <article class="stat-card"><div class="stat-top"><span>已 OC / Offer</span><span class="stat-icon">✓</span></div><div class="stat-number" id="offerCount">0</div></article>
     </section>
 
     <section class="panel distribution application-view" aria-labelledby="distributionTitle">
@@ -670,6 +697,16 @@
 
       const STAGES = ['待投递', '已投递', '笔试', '一面', '二面', 'HR面', 'Offer', '已结束'];
       const COMPANY_TYPES = ['互联网', '央国企'];
+      const LIFECYCLE_GROUPS = [
+        { id: 'active', label: '进行中', description: '待投递、已投递及面试流程' },
+        { id: 'oc', label: '已 OC / Offer', description: '已收到 Offer 或 Offer Call' },
+        { id: 'ended', label: '已结束', description: '流程已终止或不再推进' }
+      ];
+      const COMPANY_GROUPS = [
+        { id: '互联网', label: '互联网公司' },
+        { id: '央国企', label: '央国企' },
+        { id: '待分类', label: '待分类公司' }
+      ];
       // 永久兼容约定：后续版本不得更改或复用此键；字段升级统一通过 normalizeRecord 迁移。
       const STORAGE_KEY = 'autumnRecruitmentTracker.records.v1';
       const JOB_POOL_KEY = 'autumnRecruitmentTracker.jobPool.v1';
@@ -677,7 +714,7 @@
       const FEISHU_CONFIG_KEY = 'autumnRecruitmentTracker.feishu.v1';
       const QQ_JOB_DOC_URL = 'https://docs.qq.com/smartsheet/DUXJLSnZoTVFhVUVs?tab=tkaHEa&viewId=vKWCWH';
       const SCHEMA_VERSION = 2;
-      const APP_VERSION = '4.0.0';
+      const APP_VERSION = '4.1.0';
       const SAFETY_DB_NAME = 'autumnRecruitmentTracker.safety.v1';
       const $ = (selector) => document.querySelector(selector);
       const els = {
@@ -1202,6 +1239,12 @@
         return !['待投递', 'Offer', '已结束'].includes(record.stage);
       }
 
+      function lifecycleId(record) {
+        if (record.stage === 'Offer') return 'oc';
+        if (record.stage === '已结束') return 'ended';
+        return 'active';
+      }
+
       function getVisibleRecords() {
         const keyword = els.search.value.trim().toLocaleLowerCase('zh-CN');
         const companyType = els.companyTypeFilter.value;
@@ -1209,7 +1252,8 @@
         const filtered = records.filter(record => {
           const matchesText = !keyword || `${record.company} ${record.position} ${record.companyType} ${record.city} ${record.recentSchedule} ${record.nextAction}`.toLocaleLowerCase('zh-CN').includes(keyword);
           const matchesCompanyType = companyType === 'all' || (companyType === 'unclassified' ? !record.companyType : record.companyType === companyType);
-          return matchesText && matchesCompanyType && (stage === 'all' || record.stage === stage);
+          const matchesStage = stage === 'all' || (['active', 'oc', 'ended'].includes(stage) ? lifecycleId(record) === stage : record.stage === stage);
+          return matchesText && matchesCompanyType && matchesStage;
         });
         const farFuture = Number.MAX_SAFE_INTEGER;
         filtered.sort((a, b) => {
@@ -1320,12 +1364,12 @@
         const visible = getVisibleRecords();
         selectedRecordIds = new Set([...selectedRecordIds].filter(id => records.some(record => record.id === id)));
         els.caption.textContent = visible.length === records.length ? `共 ${records.length} 条记录` : `显示 ${visible.length} 条，共 ${records.length} 条`;
-        els.body.innerHTML = visible.map(record => {
+        const renderRecordRow = record => {
           const scheduleDate = parseLocal(record.scheduleAt);
           const overdue = scheduleDate && scheduleDate < new Date() && !['Offer', '已结束'].includes(record.stage);
           const companyTypeOptions = [`<option value="" ${record.companyType ? '' : 'selected'} disabled>待分类</option>`, ...COMPANY_TYPES.map(type => `<option value="${type}" ${record.companyType === type ? 'selected' : ''}>${type}</option>`)].join('');
           const stageOptions = STAGES.map(stage => `<option value="${stage}" ${record.stage === stage ? 'selected' : ''}>${stage}</option>`).join('');
-          return `<tr>
+          return `<tr class="record-row" data-stage="${escapeHtml(record.stage)}">
             <td class="select-cell"><input class="row-check" data-record-id="${escapeHtml(record.id)}" type="checkbox" aria-label="选择 ${escapeHtml(record.company)}" ${selectedRecordIds.has(record.id) ? 'checked' : ''}></td>
             <td data-label="公司 / 岗位"><div class="company-cell"><button class="company-open" data-action="edit" data-id="${escapeHtml(record.id)}" type="button"><div class="company">${escapeHtml(record.company)}</div><div class="position">${escapeHtml(record.position)}</div></button>${record.applicationUrl ? `<a class="external-link" href="${escapeHtml(record.applicationUrl)}" target="_blank" rel="noopener noreferrer" title="打开投递网页" aria-label="打开 ${escapeHtml(record.company)} 投递网页">↗</a>` : ''}</div></td>
             <td data-label="公司类型"><select class="inline-select" data-inline-field="companyType" data-id="${escapeHtml(record.id)}" aria-label="修改 ${escapeHtml(record.company)} 的公司类型">${companyTypeOptions}</select></td>
@@ -1336,7 +1380,20 @@
             <td data-label="备注"><div class="next-action">${escapeHtml(record.nextAction || '—')}</div></td>
             <td data-label="操作"><details class="row-menu"><summary aria-label="更多操作">⋯</summary><div class="row-menu-popover"><button data-action="edit" data-id="${escapeHtml(record.id)}" type="button">完整编辑</button><button class="danger" data-action="delete" data-id="${escapeHtml(record.id)}" type="button">删除</button></div></details></td>
           </tr>`;
-        }).join('');
+        };
+        const sections = [];
+        for (const lifecycle of LIFECYCLE_GROUPS) {
+          const lifecycleRecords = visible.filter(record => lifecycleId(record) === lifecycle.id);
+          if (!lifecycleRecords.length) continue;
+          sections.push(`<tr class="lifecycle-heading-row" data-lifecycle="${lifecycle.id}"><td colspan="9"><div class="lifecycle-heading">${lifecycle.label}<span class="group-count">${lifecycleRecords.length} 条 · ${lifecycle.description}</span></div></td></tr>`);
+          for (const companyGroup of COMPANY_GROUPS) {
+            const groupRecords = lifecycleRecords.filter(record => (record.companyType || '待分类') === companyGroup.id);
+            if (!groupRecords.length) continue;
+            sections.push(`<tr class="company-heading-row" data-company-group="${companyGroup.id}"><td colspan="9">${companyGroup.label} · ${groupRecords.length} 条</td></tr>`);
+            sections.push(...groupRecords.map(renderRecordRow));
+          }
+        }
+        els.body.innerHTML = sections.join('');
         els.empty.hidden = visible.length !== 0;
         $('.table-scroll').hidden = visible.length === 0;
         const selectAll = $('#selectAllRecords');
@@ -1371,7 +1428,7 @@
       }
 
       function populateSelects() {
-        els.filter.insertAdjacentHTML('beforeend', STAGES.map(s => `<option value="${s}">${s}</option>`).join(''));
+        els.filter.innerHTML = `<option value="all">全部阶段</option><optgroup label="流程分组"><option value="active">进行中</option><option value="oc">已 OC / Offer</option><option value="ended">已结束</option></optgroup><optgroup label="具体阶段">${STAGES.map(s => `<option value="${s}">${s}</option>`).join('')}</optgroup>`;
         $('#stage').innerHTML = STAGES.map(s => `<option value="${s}">${s}</option>`).join('');
       }
 

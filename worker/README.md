@@ -11,7 +11,7 @@
 
 ## 2. 部署 Worker
 
-进入 `worker` 目录：
+请先安装 Node.js 22 或更高版本，再进入 `worker` 目录：
 
 ```powershell
 npm install
